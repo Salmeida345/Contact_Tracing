@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    //implement .css and align the header
+    <link rel ="stylesheet" href = "colors.css">
+    <style>h1{text-align: center;}</style>
+</head>
+<body>
+
+<h1>Contact Manager</h1>
+
+<div class="box" >
+    <div>
+
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+
+    <button type="submit" onclick="window.location.href='afterLogin.html';">Login</button>
+
+    <label for="uname"><b>New user?&nbsp;&nbsp;</b></label>
+    </div>
+</div>
+<div class="box" style="background-color:#f1f1f1">
+    <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Create New Account</button>
+</div>
+
+<div id="id01" class="landscape">
+
+    <form class="landscape-extended animate" action="/action_page.php" method="post">
+        <div class="closebutton">
+            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Landscape">&times;</span>
+
+        </div>
+
+        <div class="box">
+            <label for="email"><b>E-mail</b></label>
+            <input type="text" placeholder="Enter E-mail" name="email" required>
+
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="uname" required>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+
+            <label for="psw"><b>Confirm Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+
+            <button type="submit" onclick="window.location.href='afterLogin.html';">Create New Account</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // set var for action
+    var lands = document.getElementById('id01');
+
+    // Goes back to main page when clicking outside of box
+    window.onclick = function(event) {
+        if (event.target == lands) {
+            lands.style.display = "none";
+        }
+    }
+</script>
+</body>
+</html>
