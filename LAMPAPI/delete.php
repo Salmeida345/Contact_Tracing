@@ -1,3 +1,5 @@
+// notes - still need to test, document on swaggerhub etc. needs editing
+
 <?php
 	$inData = getRequestInfo();
 	
