@@ -2,8 +2,6 @@
 
     $inData = getRequestInfo();
 
-    //initialize variables Here
-
     $conn = new mysqli("localhost", "ChiefHenny", "WeLoveCOP4331", "ContactTracing"); 	
 	if( $conn->connect_error )
 	{
