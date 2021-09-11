@@ -10,11 +10,14 @@
 	} 
 	else
 	{
-		$sql = "DELETE FROM Contacts WHERE FirstName = '$FirstName' and LastName = '$LastName';";
-    if ($conn->query($sql) === TRUE) {
-      echo "Contact deleted successfully.";
-    else
-      echo "Sorry, that contact does not exist.";
+		// this line needs work... not sure how to pull ContactID from the database
+		$ContactID = $conn->($inData["ContactID"]);
+		
+		$sql = "DELETE FROM Contacts WHERE ContactID = '$ContactID' and UserID = $inData["userId"];";
+    			if ($conn->query($sql) === TRUE) {
+      				echo "Contact deleted successfully.";
+    			else
+      				echo "Sorry, that contact does not exist.";
 	}
 
 	function getRequestInfo()
