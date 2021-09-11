@@ -9,14 +9,14 @@
 	}
 	else
 	{
-		$stmt = $conn->prepare("SELECT UserID, FirstName, LastName FROM Users WHERE Login=? and Password=?");
+		$stmt = $conn->prepare("SELECT UserID, FirstName, LastName, Email FROM Users WHERE Login=? and Password=?");
 		$stmt->bind_param("ss", $inData["login"], $inData["password"]);
 		$stmt->execute();
 		$result = $stmt->get_result();
 
 		if($line = $result->fetch_assoc())
 		{
-			formatReturn($line['FirstName'], $line['LastName'], $line['UserID']);
+			formatAndReturn($line['FirstName'], $line['LastName'], $line['Email'], $line['UserID']);
 		}
 		else
 		{
@@ -28,9 +28,9 @@
 		$conn->close();
 	}
 
-	function formatReturn($first, $last, $id)
+	function formatAndReturn($first, $last, $email, $id)
 	{
-		$toReturn = '{"id":' . $id . ',"firstName":"' . $first . '","lastName":"' . $last . '"}';
+		$toReturn = '{"id":' . $id . ',"firstName":"' . $first . '","lastName":"'  . $last . '","email":"'  . $email . '"}';
 		sendResultInfoAsJson($toReturn);
 	}
 

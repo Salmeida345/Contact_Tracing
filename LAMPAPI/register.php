@@ -30,8 +30,8 @@
 		{
 			$stmt->close();
 
-			$stmt = $conn->prepare("INSERT INTO Users (FirstName, LastName, Login, Password) VALUES(?,?,?,?)");
-			$stmt->bind_param("ssss", $inData["firstName"], $inData["lastName"], $inData["login"], $inData["password"]);
+			$stmt = $conn->prepare("INSERT INTO Users (FirstName, LastName, Email, Login, Password) VALUES(?,?,?,?,?)");
+			$stmt->bind_param("sssss", $inData["firstName"], $inData["lastName"], $inData["email"], $inData["login"], $inData["password"]);
 			$stmt->execute();
 			returnWithError("");
 		}
