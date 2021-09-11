@@ -2,9 +2,6 @@
 
 <?php
 	$inData = getRequestInfo();
-	
-	$FirstName = $inData["FirstName"];
-	$LastName = $inData["LastName"];
 
   $conn = new mysqli("localhost", "ChiefHenny", "WeLoveCOP4331", "ContactTracing"); 	
 	if ($conn->connect_error) 
