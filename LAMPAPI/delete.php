@@ -1,6 +1,4 @@
 <?php
-echo "This server is working.";
-	
 $inData = getRequestInfo();
 
   $conn = new mysqli("localhost", "ChiefHenny", "WeLoveCOP4331", "ContactTracing"); 	
@@ -11,9 +9,9 @@ $inData = getRequestInfo();
 	else
 	{
 		$stmt = $conn->prepare("SELECT ContactID FROM Contacts WHERE ContactID=? and UserID=?");
-        $stmt->bind_param("ii", $inData["contactID"], $inData["userID"]);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        	$stmt->bind_param("ii", $inData["contactID"], $inData["userID"]);
+        	$stmt->execute();
+        	$result = $stmt->get_result();
 
 		if($result->fetch_assoc())
         {
