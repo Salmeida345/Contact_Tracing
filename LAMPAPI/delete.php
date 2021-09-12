@@ -1,7 +1,7 @@
-// notes - still need to test, document on swaggerhub etc. needs editing
-
 <?php
-	$inData = getRequestInfo();
+echo "This server is working.";
+	
+$inData = getRequestInfo();
 
   $conn = new mysqli("localhost", "ChiefHenny", "WeLoveCOP4331", "ContactTracing"); 	
 	if ($conn->connect_error) 
@@ -10,15 +10,23 @@
 	} 
 	else
 	{
-		// this line needs work... not sure how to pull ContactID from the database
-		$ContactID = $conn->($inData["ContactID"]);
-		
-		$sql = "DELETE FROM Contacts WHERE ContactID = '$ContactID' and UserID = $inData["userId"];";
+		$stmt = $conn->prepare("SELECT ContactID FROM Contacts WHERE ContactID=? and UserID=?");
+        $stmt->bind_param("ii", $inData["contactID"], $inData["userID"]);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+		if($result->fetch_assoc())
+        {
+			$sql = "DELETE FROM Contacts WHERE ContactID = $inData["contactID"] and UserID = $inData["userId"];";
     			if ($conn->query($sql) === TRUE) {
       				echo "Contact deleted successfully.";
+				}
     			else
-      				echo "Sorry, that contact does not exist.";
-	}
+      				echo "Sorry, that contact does not exist." . $conn->error;
+		}
+		else{
+			returnWithError($result);
+		}
 
 	function getRequestInfo()
 	{
@@ -36,5 +44,4 @@
 		$retValue = '{"error":"' . $err . '"}';
 		sendResultInfoAsJson( $retValue );
 	}
-	
 ?>
