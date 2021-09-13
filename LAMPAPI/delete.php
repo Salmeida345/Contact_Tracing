@@ -14,18 +14,22 @@ $inData = getRequestInfo();
         	$result = $stmt->get_result();
 
 		if($result->fetch_assoc())
-        {
+        	{
 			$sql = "DELETE FROM Contacts WHERE ContactID = $inData["contactID"] and UserID = $inData["userId"];";
-    			if ($conn->query($sql) === TRUE) {
+    			if ($conn->query($sql) === TRUE) 
+			{
       				echo "Contact deleted successfully.";
-				}
+			}
     			else
+			{
       				echo "Sorry, that contact does not exist." . $conn->error;
+			}
 		}
-		else{
+		else
+		{
 			returnWithError($result);
 		}
-
+	}
 	function getRequestInfo()
 	{
 		return json_decode(file_get_contents('php://input'), true);
