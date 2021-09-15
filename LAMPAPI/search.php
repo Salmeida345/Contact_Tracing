@@ -4,7 +4,7 @@
 	
 	$searchResults = "";
 	$searchCount = 0;
-	$userID = $inData["userid"];
+	$userID = $inData["userId"];
 
 	$conn = new mysqli("localhost", "ChiefHenny", "WeLoveCOP4331", "ContactTracing"); 	
 	if( $conn->connect_error )
@@ -13,9 +13,9 @@
 	}
 	else
 	{
-		$stmt = $conn->prepare("SELECT * FROM Contacts where UserID=? AND (FirstName LIKE ? or LastName LIKE ? or PhoneNumber LIKE ? or EmailAddress LIKE ?) ORDER BY FirstName, LastName");
+		$stmt = $conn->prepare("SELECT * FROM Contacts where UserID=? AND (FirstName LIKE ? or LastName LIKE ? or PhoneNumber LIKE ? or EmailAddress LIKE ?) ORDER BY LastName, FirstName");
 		$searchItem = "%" . $inData["search"] . "%";
-		$stmt->bind_param("sssss", $userID, $searchItem, $searchItem, $searchItem, $searchItem);
+		$stmt->bind_param("issss", $userID, $searchItem, $searchItem, $searchItem, $searchItem);
 		$stmt->execute();
 		
 		$result = $stmt->get_result();
@@ -27,18 +27,20 @@
 				$searchResults .= ",";
 			}
 			$searchCount++;
-			$searchResults .= '{"FirstName": "' . $row["FirstName"] . '", "LastName": "' . $row["LastName"] . '", "PhoneNumber": "' . $row["PhoneNumber"] . '", "Emailaddress": "' . $row["EmailAddress"] . '"}';
+			$searchResults .= '{"id": "' . $row["ContactID"] . '", "firstName": "' . $row["FirstName"] . '", "lastName": "' . $row["LastName"] . '", "phone": "' . $row["PhoneNumber"] . '", "email": "' . $row["EmailAddress"] . '"}';
 		}
 		
 		if( $searchCount == 0 )
 		{
-			returnWithError( "No Records Found" );
+			returnWithError( "No Records Found!" );
 		}
 		else
 		{
 			returnWithInfo( $searchResults );
 		}
-		
+
+		$stmt->close();
+		$conn->close();
 	}
 
 	function getRequestInfo()
@@ -54,7 +56,7 @@
 	
 	function returnWithError( $err )
 	{
-		$retValue = '{"id":0,"firstName":"","lastName":"","phoneNumber":"","emailAddress":"","error":"' . $err . '"}';
+		$retValue = '{"id":0,"firstName":"","lastName":"","phoneNumber":"","email":"","error":"' . $err . '"}';
 		sendResultInfoAsJson( $retValue );
 	}
 	
