@@ -1,35 +1,35 @@
 <?php
+
 $inData = getRequestInfo();
 
   $conn = new mysqli("localhost", "ChiefHenny", "WeLoveCOP4331", "ContactTracing"); 	
 	if ($conn->connect_error) 
 	{
 		returnWithError( $conn->connect_error );
-	} 
+	}
+
+	if (!$inData["ContactID"]) {
+		returnWithError("No ID provided! This is a debugging state!");
+	}
+
 	else
 	{
-		$stmt = $conn->prepare("SELECT ContactID FROM Contacts WHERE ContactID=? and UserID=?");
-        	$stmt->bind_param("ii", $inData["contactID"], $inData["userID"]);
+		$stmt = $conn->prepare("DELETE FROM Contacts WHERE ContactID=? and UserID=?");
+        	$stmt->bind_param("ss", $inData["ContactID"], $inData["UserID"]);
         	$stmt->execute();
-        	$result = $stmt->get_result();
 
-		if($result->fetch_assoc())
-        	{
-			$sql = "DELETE FROM Contacts WHERE ContactID = $inData["contactID"] and UserID = $inData["userId"];";
-    			if ($conn->query($sql) === TRUE) 
-			{
-      				echo "Contact deleted successfully.";
-			}
-    			else
-			{
-      				echo "Sorry, that contact does not exist." . $conn->error;
-			}
+		if($stmt->errno){
+			returnWithError($stmt->errno);
 		}
-		else
-		{
-			returnWithError($result);
+
+		else{
+			echo "Deletion successful!";
+			$stmt->close;
 		}
+	
+		$conn->close;
 	}
+
 	function getRequestInfo()
 	{
 		return json_decode(file_get_contents('php://input'), true);
