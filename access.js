@@ -14,49 +14,51 @@ function doLogin() {
     lastName = "";
 
     // Grab the data we need from the HTML fields
-    let login = document.getElementById("loginName").value;
-    let password = document.getElementById("loginPW").value;
+    var login = document.getElementById("loginName").value;
+    var password = document.getElementById("loginPW").value;
 
     document.getElementById("login").innerHTML = "";
 
 
     var jsonPayload = JSON.stringify({login: login, password: password});
-    var url = urlBase + '/LAMPAPI/Login.' + extension;
+    var url = urlBase + '/LAMPAPI/login.' + extension;
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", url, false);
+    xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     try
     {
         xhr.onreadystatechange = function() {
-            if (this.readyState === 4 && this.status === 200) {
+            if (this.readyState == 4 && this.status == 200) {
                 var jsonObject = JSON.parse(xhr.responseText);
 
                 userID = jsonObject.id;
-                firstName = jsonObject.firstName;
-                lastName = jsonObject.lastName;
+                console.log(xhr.response);
+
 
                 if (userID < 1) {
                     document.getElementById("login").innerHTML = "User/Password combination incorrect";
                     return;
                 }
 
+                firstName = jsonObject.firstName;
+                lastName = jsonObject.lastName;
+
 
                 saveCookie();
 
-                window.location.href = "frontPage.html";
+                window.location.href = "afterLogin.html";
 
             }
-        }
-    xhr.send(jsonPayload);
-        }
+        };
+        xhr.send(jsonPayload);
+    }
     catch(err)
     {
         document.getElementById("login").innerHTML = err.message;
     }
 
-    document.getElementById('userName').innerHTML = "Welcome, " + firstName + " " + lastName + "!";
 }
 
 // will add new user to the database and sign them into their new account (so that they don't login after signing up)
@@ -69,9 +71,9 @@ function doRegister()
     firstName = document.getElementById("registerFName").value;
     lastName = document.getElementById("registerLName").value;
 
-    let login = document.getElementById("registerUser").value;
-    let password = document.getElementById("registerPW").value;
-    let confirmPassword = document.getElementById("registerConfirmPW").value;
+    var login = document.getElementById("registerUser").value;
+    var password = document.getElementById("registerPW").value;
+    var confirmPassword = document.getElementById("registerConfirmPW").value;
 
     document.getElementById("registration").innerHTML = "";
 
@@ -92,31 +94,35 @@ function doRegister()
     var url = urlBase + '/LAMPAPI/register.' + extension;
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", url, false);
+    xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     try
     {
         xhr.onreadystatechange = function() {
-            if (this.readyState === 4 && this.status === 200) {
+            if (this.readyState == 4 && this.status == 200) {
 
 
                 var jsonObject = JSON.parse(xhr.responseText);
+                console.log(xhr.response);
+
 
                 userID = jsonObject.id;
-                firstName = jsonObject.firstName;
-                lastName = jsonObject.lastName;
+
 
                 if (userID < 1) {
                     document.getElementById("registration").innerHTML = "Registration failed";
                     return;
                 }
 
+                firstName = jsonObject.firstName;
+                lastName = jsonObject.lastName;
+
                 saveCookie();
 
-                window.location.href = "frontPage.html";
+                window.location.href = "afterLogin.html";
             }
-        }
+        };
         xhr.send(jsonPayload);
     }
     catch(err)
@@ -124,7 +130,6 @@ function doRegister()
         document.getElementById("registration").innerHTML = err.message;
     }
 
-    document.getElementById('userName').innerHTML = "Welcome, " + firstName + " " + lastName + "!";
 }
 
 
@@ -161,7 +166,7 @@ function readCookie()
 
     if( userID < 0 )
     {
-        window.location.href = "frontPage.html";
+        window.location.href = "index.html";
     }
     else
     {
@@ -175,7 +180,7 @@ function doLogout()
     firstName = "";
     lastName = "";
     document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-    window.location.href = "frontPage.html";
+    window.location.href = "index.html";
 }
 
 function displayChange(show, hide)
@@ -228,20 +233,20 @@ function addContacts()
     var url = urlBase + '/LAMPAPI/add.' + extension;
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", url, false);
+    xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     try
     {
         xhr.onreadystatechange = function() {
-            if (this.readyState === 4 && this.status === 200) {
+            if (this.readyState == 4 && this.status == 200) {
 
 
                 document.getElementById("userName").innerHTML = "Contact has been added";
                 callSearch();
             }
-        }
-    xhr.send(jsonPayload);
+        };
+        xhr.send(jsonPayload);
     }
     catch(err)
     {
@@ -267,13 +272,13 @@ function doSearch()
     var url = urlBase + '/LAMPAPI/search.' + extension;
     var xhr = new XMLHttpRequest();
 
-    xhr.open("POST", url, false);
+    xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     try
     {
         xhr.onreadystatechange = function() {
-            if (this.readyState === 4 && this.status === 200) {
+            if (this.readyState == 4 && this.status == 200) {
 
                 var jsonObject = JSON.parse(xhr.responseText);
 
@@ -319,13 +324,13 @@ function doSearch()
                         var urlForEdit = urlBase + '/LAMPAPI/search.' + extension;
 
                         var xhrForEdit = new XMLHttpRequest();
-                        xhrForEdit.open("POST", urlForEdit, false);
+                        xhrForEdit.open("POST", urlForEdit, true);
                         xhrForEdit.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
                         try {
 
                             xhrForEdit.onreadystatechange = function() {
-                                if (this.readyState === 4 && this.status === 200) {
+                                if (this.readyState == 4 && this.status == 200) {
                                     var jsonObject = JSON.parse(xhr.responseText);
 
                                     // contact vars
@@ -341,7 +346,7 @@ function doSearch()
                                     document.getElementById("newContactEmail").value = email;
                                     document.getElementById("newContactEmail").value = phone;
                                 }
-                            }
+                            };
                             xhr.send(jsonPayloadForEdit);
                         }
 
@@ -353,13 +358,13 @@ function doSearch()
                     editButton.innerHTML = "Edit";
 
 
-                    const deleteButton = document.createElement("button");
+                    var deleteButton = document.createElement("button");
                     deleteButton.type = "button";
                     deleteButton.className = "gotoDeleteButton";
                     deleteButton.addEventListener("click", function(){
                         var accessParentToDelete = this.parentNode;
                         accessIdForDeletion = accessParentToDelete.id;
-                        const popup = document.getElementById("finalizeDelete");
+                        var popup = document.getElementById("finalizeDelete");
                         popup.style.display = "block";
                     });
                     deleteButton.innerHTML = "Delete";
@@ -372,12 +377,12 @@ function doSearch()
                     document.getElementById("ContactsList").appendChild(buttonElement);
                     document.getElementById("ContactsList").appendChild(divElement);
 
-                    let accessButtons = this.classList;
+                    var accessButtons = this.classList;
 
                     //sets height so that it isn't greater than it should be
                     buttonElement.addEventListener("click", function () {
                         accessButtons.toggle("active");
-                        const content = this.nextElementSibling;
+                        var content = this.nextElementSibling;
                         if (content.style.maxHeight) {
                             content.style.maxHeight = null;
                         } else {
@@ -388,7 +393,7 @@ function doSearch()
 
                 document.getElementById("userName").innerHTML = "Contact found";
             }
-        }
+        };
         xhr.send(jsonPayload);
     }
     catch(err)
@@ -414,7 +419,7 @@ function doEdit()
     var url = urlBase + '/LAMPAPI/update.' + extension;
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", url, false);
+    xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     try
@@ -442,7 +447,7 @@ function doDelete()
     var url = urlBase + '/LAMPAPI/delete.' + extension;
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", url, false);
+    xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     try

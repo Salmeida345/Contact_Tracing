@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--implement .css and align the header-->
+    <link rel ="stylesheet" href = "colors.css">
+    <style>h1{text-align: center;}</style>
+    <script type="text/javascript" src="access.js"></script>
+
+</head>
+<body>
+
+<title>Contact Manager</title>
+<h1>Contact Manager</h1><br/><br/>
+
+
+<div class="box">
+    <div id = "loginDiv" style="display:block">
+        <span >Login Form</span><br/></br>
+        <input type="text" id="loginName" placeholder="Username" /><br />
+        <input type="password" id="loginPW" placeholder="Password"/><br />
+        <button type="button" id="loginButton" onclick="doLogin();"> Login </button>
+        <button type="button" id="switchToSignup" onclick="displayChange('registerDiv', 'loginDiv');">Register</button>
+        <span id="login"></span>
+    </div>
+
+    <div id="registerDiv" style="display:none">
+        <span >Registration Form</span></br>
+        <input type="text" id="registerFName" placeholder="First Name" /><br />
+        <input type="text" id="registerLName" placeholder="Last Name" /><br />
+        <input type="text" id="registerUser" placeholder="Username" /><br />
+        <input type="password" id="registerPW" placeholder="Password"/><br />
+        <input type="password" id="registerConfirmPW" placeholder="Confirm Password"/><br/>
+        <button type="button" id="signupButton" onclick="doRegister();">Register</button>
+        <button type="button" id="switchToLogin" onclick="displayChange('loginDiv', 'registerDiv');">Back to Login</button>
+        <span id="registration"></span>
+    </div>
+
+</div>
+
+<script>
+</script>
+</body>
+</html>
