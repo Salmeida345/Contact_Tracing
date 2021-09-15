@@ -1,7 +1,9 @@
+// C:\Users\ronca\WebstormProjects\SmallProj\
+// 161.35.48.46 for PuTTY use
 var urlBase = 'http://contacttracing-4331.com';
 var extension = 'php';
 
-var userID = 0;
+var userId = 0;
 var firstName = "";
 var lastName = "";
 var accessIdForEdit = "";
@@ -9,7 +11,7 @@ var accessIdForDeletion = "";
 
 function doLogin() {
 
-    userID = 0;
+    userId = 0;
     firstName = "";
     lastName = "";
 
@@ -30,14 +32,14 @@ function doLogin() {
     try
     {
         xhr.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
+            if (this.readyState === 4 && this.status === 200) {
                 var jsonObject = JSON.parse(xhr.responseText);
 
-                userID = jsonObject.id;
+                userId = jsonObject.id;
                 console.log(xhr.response);
 
 
-                if (userID < 1) {
+                if (userId < 1) {
                     document.getElementById("login").innerHTML = "User/Password combination incorrect";
                     return;
                 }
@@ -64,7 +66,7 @@ function doLogin() {
 // will add new user to the database and sign them into their new account (so that they don't login after signing up)
 function doRegister()
 {
-    userID = 0;
+    userId = 0;
     firstName = "";
     lastName = "";
 
@@ -77,12 +79,6 @@ function doRegister()
 
     document.getElementById("registration").innerHTML = "";
 
-    //checks that login/password is valid and that passwords match
-    if (login === null || login === "" || password === "" || password === null )
-    {
-        document.getElementById("registration").innerHTML = "Invalid Username or Password";
-        return;
-    }
     if (password !== confirmPassword)
     {
         document.getElementById("registration").innerHTML = "Passwords do not match";
@@ -100,17 +96,17 @@ function doRegister()
     try
     {
         xhr.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
+            if (this.readyState === 4 && this.status === 200) {
 
 
                 var jsonObject = JSON.parse(xhr.responseText);
                 console.log(xhr.response);
 
 
-                userID = jsonObject.id;
+                userId = jsonObject.id;
 
 
-                if (userID < 1) {
+                if (userId < 1) {
                     document.getElementById("registration").innerHTML = "Registration failed";
                     return;
                 }
@@ -138,12 +134,12 @@ function saveCookie()
     var minutes = 20;
     var date = new Date();
     date.setTime(date.getTime()+(minutes*60*1000));
-    document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userID=" + userID + ";expires" + date.toGMTString();
+    document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userID=" + userId + ";expires" + date.toGMTString();
 }
 
 function readCookie()
 {
-    userID = -1;
+    userId = -1;
     var data = document.cookie;
     var splits = data.split(",");
     for(var i = 0; i < splits.length; i++)
@@ -160,11 +156,11 @@ function readCookie()
         }
         else if( tokens[0] === "userID" )
         {
-            userID = parseInt( tokens[1].trim() );
+            userId = parseInt( tokens[1].trim() );
         }
     }
 
-    if( userID < 0 )
+    if( userId < 0 )
     {
         window.location.href = "index.html";
     }
@@ -176,7 +172,7 @@ function readCookie()
 
 function doLogout()
 {
-    userID = 0;
+    userId = 0;
     firstName = "";
     lastName = "";
     document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
@@ -189,46 +185,35 @@ function displayChange(show, hide)
     document.getElementById(hide).style.display="none";
 }
 
-//next two functions are called from afterLogin.html. They serve to clear and prepare for input
-function callAdd()
-{
-    displayChange('cancelAddContactButton', 'logoutButton');
-    displayChange('addContactsButton', 'goToAddContactsButton');
-    displayChange('addContactsDiv','searchContactsDiv');
 
-    document.getElementById('userName').innerHTML = "Add contact's info";
+function addContacts() {
 
-    // clears all input
     document.getElementById("newContactFName").value = "";
     document.getElementById("newContactLName").value = "";
     document.getElementById("newContactEmail").value = "";
     document.getElementById("newContactPhone").value = "";
 
-}
-
-function callSearch()
-{
-    displayChange('logoutButton', 'cancelAddContactButton');
-    displayChange('goToAddContactsButton','addContactsButton');
-    displayChange('goToAddContactsButton', 'confirmEditButton');
-    displayChange('searchContactsDiv', 'addContactsDiv');
-
-    accessIdForEdit = "";
-
-}
-
-function addContacts()
-{
     // Grab values from HTML
     var addedFName = document.getElementById("newContactFName").value;
     var addedLName = document.getElementById("newContactLName").value;
     var addedEmail = document.getElementById("newContactEmail").value;
     var addedPhone = document.getElementById("newContactPhone").value;
 
+    // checks that info is good
+    if (addedFName === null || addedFName === "" || addedLName === "" || addedLName === null){
+        document.getElementById("added").innerHTML = "Please type in your First and/or Last Name";
+        return;
+        }
+    if (addedEmail === null || addedEmail === "" ||addedPhone === null || addedPhone === "")
+    {
+        document.getElementById("added").innerHTML = "Please enter a correct Email or Number";
+        return;
+    }
+
     document.getElementById("added").innerHTML = "";
 
     var jsonPayload = JSON.stringify({firstName: addedFName,
-        lastName: addedLName, email: addedEmail, phone: addedPhone, userID: userID });
+        lastName: addedLName, email: addedEmail, phone: addedPhone, userID: userId });
 
     var url = urlBase + '/LAMPAPI/add.' + extension;
 
@@ -239,9 +224,7 @@ function addContacts()
     try
     {
         xhr.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-
-
+            if (this.readyState === 4 && this.status === 200) {
                 document.getElementById("userName").innerHTML = "Contact has been added";
                 callSearch();
             }
@@ -252,12 +235,25 @@ function addContacts()
     {
         document.getElementById("userName").innerHTML = err.message;
     }
-    // call search so that it refreshes after adding.
-    doSearch();
+
+    // deleted -- call search so that it refreshes after adding. (may reinstate)
 }
+// function callSearch()
+// {
+//     displayChange('goToAddContactsButton','addContactsButton');
+//     displayChange('goToAddContactsButton', 'confirmEditButton');
+//     displayChange('searchContactsDiv', 'addContactsDiv');
+//
+//     accessIdForEdit = "";
+//
+//     doSearch();
+//
+// }
 
 function doSearch()
 {
+
+    accessIdForEdit = "";
     var lookUp = document.getElementById("searchText").value;
 
     document.getElementById("ContactsSearchResult").innerHTML = "";
@@ -268,7 +264,7 @@ function doSearch()
         clearList.removeChild(clearList.lastChild);
 
 
-    var jsonPayload = JSON.stringify({search:lookUp, userID:userID});
+    var jsonPayload = JSON.stringify({search:lookUp, userid:userId});
     var url = urlBase + '/LAMPAPI/search.' + extension;
     var xhr = new XMLHttpRequest();
 
@@ -278,7 +274,7 @@ function doSearch()
     try
     {
         xhr.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
+            if (this.readyState === 4 && this.status === 200) {
 
                 var jsonObject = JSON.parse(xhr.responseText);
 
@@ -330,7 +326,7 @@ function doSearch()
                         try {
 
                             xhrForEdit.onreadystatechange = function() {
-                                if (this.readyState == 4 && this.status == 200) {
+                                if (this.readyState === 4 && this.status === 200) {
                                     var jsonObject = JSON.parse(xhr.responseText);
 
                                     // contact vars

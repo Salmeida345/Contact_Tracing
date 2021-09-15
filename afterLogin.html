@@ -1,139 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <!--implement .css and align the header-->
-    <meta charset="UTF-8">
+    <!-- Favicon -->
+    <!-- Fonts -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel ="stylesheet" href = "colors.css">
-    <style>h1{text-align: center;}</style>
+    <link id="mode" href="../css/colors.css" rel="stylesheet">
+
+
+    <script type="text/javascript" src="../js/access.js"></script>
 
 </head>
-
 <body>
-<h1>Contact Manager</h1>
+
 
 <div class="box">
-    <div>
-        <label for="add"><b>View Contacts</b></label>
+<button type="button" class="logoutButton" style="display:block" onclick="doLogout();"> Log Out </button>
+<br></br>
 
+<title>Contact Manager</title>
+<h1>Contact Manager</h1>
+
+
+
+    <!-- login button -->
+    <div id="loginDiv" style="display:block">
+        <span id="userName"></span><br/>
     </div>
 
-    <div class="box" style="background-color:#f1f1f1">
-        <button onclick="document.getElementById('id04').style.display='block'" style="width:auto;">View Contacts</button>
+    <!-- Contacts main page div -->
+    <div id="searchContactsDiv" style="display:block">
+        <br />
+        <div id="searchPanelDiv" style="display:block">
+            <input type="text" id="searchText" placeholder="Contacts To Search For"/>
+            <button type="button" onclick="displayChange('searchPanelDiv','searchContactsDiv')"> Search </button>
+        </div>
+        </br>
+        <button type="button" id="goToAddContactsButton" style="display:block" onclick="displayChange('addContactsDiv', 'searchContactsDiv');"> Add </button><br/>
+
+        <div id="contactsListDiv">
+            <span id="ContactsSearchResult"></span>
+            <button type="button" id="confirmEditButton" style="display:none" onclick="doEdit();"> Update </button>
+            <div id="ContactsList">
+            </div>
+        </div>
+
+        <br/><br />
     </div>
 
-    <div>
-        <label for="add"><b>Add a Contact</b></label>
-
+<!--    add contacts div screen-->
+    <div id="addContactsDiv" style="display:none">
+        <br/>
+        <input type="text" id="newContactFName" placeholder="Contact's First Name">
+        <input type="text" id="newContactLName" placeholder="Contact's Last Name">
+        <input type="text" id="newContactEmail" placeholder="Contact's Email">
+        <input type="text" id="newContactPhone" placeholder="Contact's Phone Number">
+        <button type="button" id="addContactsButton" style="display:block" onclick="addContacts();"
+       > Add </button><br />
+       <button type="button" id="delete" style="display:block" onclick="displayChange('searchContactsDiv', 'addContactsDiv');"
+       >Return to Page </button><br />
+        <span id="added"></span>
     </div>
 
-    <div class="box" style="background-color:#f1f1f1">
-        <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Add Contact</button>
-    </div>
-    <div>
-        <label for="delete"><b>Delete a Contact</b></label>
-    </div>
-    <div class="box" style="background-color:#f1f1f1">
-        <button onclick="document.getElementById('id02').style.display='block'" style="width:auto;">Delete Contact</button>
-    </div>
-    <div>
-        <label for="search"><b>Search a Contact</b></label>
-    </div>
-    <div class="box" style="background-color:#f1f1f1">
-        <button onclick="document.getElementById('id03').style.display='block'" style="width:auto;">Search Contact</button>
+
+    <!-- Contains the components of the popup window that asks you to confirm deletion of a contact -->
+    <div id="finalizeDelete" class="popup">
+        <div id="popupContent">
+            <button type="button" id="deleteButton" onclick="doDelete();"> Delete Contact </button>
+
+        </div>
     </div>
 </div>
-
-<div id="id01" class="landscape">
-
-    <form class="landscape-extended animate" action="/action_page.php" method="post">
-        <div class="closebutton">
-            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Landscape">&times;</span>
-
-        </div>
-
-        <div class="box">
-            <label for="fname"><b>First Name</b></label>
-            <input type="text" placeholder="First Name" name="fname" required>
-
-            <label for="lname"><b>Last Name</b></label>
-            <input type="text" placeholder="Last Name" name="lname" required>
-
-            <label for="email"><b>E-mail</b></label>
-            <input type="text" placeholder="E-mail" name="email" required>
-
-            <label for="phone"><b>Phone Number</b></label>
-            <input type="text" placeholder="###-###-####" name="phone" required>
-
-            <button type="submit">Add Contact</button>
-        </div>
-    </form>
-</div>
-
-<div id="id02" class="landscape">
-
-    <form class="landscape-extended animate" action="/action_page.php" method="post">
-        <div class="closebutton">
-            <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Landscape">&times;</span>
-        </div>
-
-        <div class="box">
-            <label for="fname"><b>First Name</b></label>
-            <input type="text" placeholder="First Name" name="fname" required>
-
-            <label for="lname"><b>Last Name</b></label>
-            <input type="text" placeholder="Last Nam" name="lname" required>
-
-            <label for="email"><b>E-mail</b></label>
-            <input type="text" placeholder="E-mail" name="email" required>
-
-            <button type="submit">Delete Contact</button>
-        </div>
-    </form>
-</div>
-
-<div id="id03" class="landscape">
-
-    <form class="landscape-extended animate" action="/action_page.php" method="post">
-        <div class="closebutton">
-            <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Landscape">&times;</span>
-
-        </div>
-
-        <div class="box">
-            <label for="fname"><b>First Name</b></label>
-            <input type="text" placeholder="First Name" name="fname" required>
-
-            <label for="lname"><b>Last Name</b></label>
-            <input type="text" placeholder="Last Name" name="lname" required>
-
-            <label for="email"><b>E-mail</b></label>
-            <input type="text" placeholder="E-mail" name="email" required>
-
-            <button type="submit">Search Contact</button>
-        </div>
-    </form>
-</div>
-
-
-
-<script>
-    // set three vars for three actions
-    var lands = document.getElementById('id01');
-    var yoyoma = document.getElementById('id02');
-    var moosesoup = document.getElementById('id03');
-
-    // Goes back to main page when clicking outside of box
-    window.onclick = function(event) {
-        if (event.target == lands) {
-            lands.style.display = "none";
-        }
-        if (event.target == yoyoma) {
-            yoyoma.style.display = "none";
-        }if (event.target == moosesoup) {
-            moosesoup.style.display = "none";
-        }
-    }
-</script>
 </body>
 </html>
