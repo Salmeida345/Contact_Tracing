@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Contact Manager</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--implement .css and align the header-->
-    <link rel ="stylesheet" href = "colors.css">
+    <link rel ="stylesheet" href = "css/colors.css">
     <style>h1{text-align: center;}</style>
-    <script type="text/javascript" src="access.js"></script>
+    <script type="text/javascript" src="js/access.js"></script>
 
 </head>
 <body>
 
-<title>Contact Manager</title>
-<h1>Contact Manager</h1><br/><br/>
+<h1 id = "title">Contact Manager</h1><br/><br/>
 
 
-<div class="box">
+
     <div id = "loginDiv" style="display:block">
-        <span >Login Form</span><br/></br>
+        <span id = "inner-title">Login Form</span><br/></br>
         <input type="text" id="loginName" placeholder="Username" /><br />
         <input type="password" id="loginPW" placeholder="Password"/><br />
         <button type="button" id="loginButton" onclick="doLogin();"> Login </button>
@@ -28,7 +28,7 @@
         <span >Registration Form</span></br>
         <input type="text" id="registerFName" placeholder="First Name" /><br />
         <input type="text" id="registerLName" placeholder="Last Name" /><br />
-        <input type="password" id="registerEmail" placeholder="Email"/><br/>
+        <input type="text" id="registerEmail" placeholder="Email"/><br/>
         <input type="text" id="registerUser" placeholder="Username" /><br />
         <input type="password" id="registerPW" placeholder="Password"/><br />
         <input type="password" id="registerConfirmPW" placeholder="Confirm Password"/><br/>

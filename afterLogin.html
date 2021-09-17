@@ -1,23 +1,21 @@
 <html>
 <head>
-    <!-- Favicon -->
-    <!-- Fonts -->
+    <title>Contact Manager</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link id="mode" href="../css/colors.css" rel="stylesheet">
+    <link id="mode" href="css/colors.css" rel="stylesheet">
 
 
-    <script type="text/javascript" src="../js/access.js"></script>
+    <script type="text/javascript" src="js/access.js"></script>
 
 </head>
 <body>
 
 
 <div class="box">
-<button type="button" class="logoutButton" style="display:block" onclick="doLogout();"> Log Out </button>
-<br></br>
+    <button type="button" class="logoutButton" style="display:block" onclick="doLogout();"> Log Out </button>
+    <br></br>
 
-<title>Contact Manager</title>
-<h1>Contact Manager</h1>
+    <h1>Contact Manager</h1>
 
 
 
@@ -27,26 +25,31 @@
     </div>
 
     <!-- Contacts main page div -->
-    <div id="searchContactsDiv" style="display:block">
+    <div id="mainPanel" style="display:block">
         <br />
-        <div id="searchPanelDiv" style="display:block">
-            <input type="text" id="searchText" placeholder="Contacts To Search For"/>
-            <button type="button" onclick="displayChange('searchPanelDiv','searchContactsDiv')"> Search </button>
-        </div>
-        </br>
-        <button type="button" id="goToAddContactsButton" style="display:block" onclick="displayChange('addContactsDiv', 'searchContactsDiv');"> Add </button><br/>
-
-        <div id="contactsListDiv">
-            <span id="ContactsSearchResult"></span>
-            <button type="button" id="confirmEditButton" style="display:none" onclick="doEdit();"> Update </button>
-            <div id="ContactsList">
-            </div>
-        </div>
+            <button type="button" onclick="displayChange('searchContactsDiv','mainPanel')"> Search </button>
+        </br></br>
+        <button type="button" id="goToAddContactsButton" style="display:block" onclick="displayChange('addContactsDiv', 'mainPanel');"> Add </button><br/>
 
         <br/><br />
     </div>
 
-<!--    add contacts div screen-->
+<!--Search Contacts-->
+    <div id = "searchContactsDiv" style=" display:none">
+        <input type="text" id="searchText" placeholder="Contacts To Search For"/>
+        <button type="button" id="confirmSearchButton" style="display:block" onclick="doSearch();"> Search </button></br>
+        <button type="button" id="confirmEditButton" style="display:none" onclick="doEdit();"> Update </button>
+        <button type="button" id="returnFromSearch" style="display:block" onclick="displayChange('mainPanel', 'searchContactsDiv');"
+        >Return to Page </button><br />
+        <div id="contactsListDiv">
+            <span id="ContactsSearchResult"></span>
+            <div id="ContactsList">
+            </div>
+        </div>
+
+    </div>
+
+    <!--    add contacts div screen-->
     <div id="addContactsDiv" style="display:none">
         <br/>
         <input type="text" id="newContactFName" placeholder="Contact's First Name">
@@ -54,9 +57,9 @@
         <input type="text" id="newContactEmail" placeholder="Contact's Email">
         <input type="text" id="newContactPhone" placeholder="Contact's Phone Number">
         <button type="button" id="addContactsButton" style="display:block" onclick="addContacts();"
-       > Add </button><br />
-       <button type="button" id="delete" style="display:block" onclick="displayChange('searchContactsDiv', 'addContactsDiv');"
-       >Return to Page </button><br />
+        > Add </button><br />
+        <button type="button" id="returnFromAdd" style="display:block" onclick="displayChange('mainPanel', 'addContactsDiv');"
+        >Return to Page </button><br />
         <span id="added"></span>
     </div>
 

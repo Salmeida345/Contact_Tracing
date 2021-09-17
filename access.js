@@ -74,6 +74,7 @@ function doRegister()
     lastName = document.getElementById("registerLName").value;
 
     var login = document.getElementById("registerUser").value;
+    var email = document.getElementById("registerEmail").value;
     var password = document.getElementById("registerPW").value;
     var confirmPassword = document.getElementById("registerConfirmPW").value;
 
@@ -86,7 +87,7 @@ function doRegister()
     }
 
     var jsonPayload = JSON.stringify({firstName: firstName,
-        lastName: lastName, login: login, password: password });
+        lastName: lastName,email: email, login: login, password: password });
     var url = urlBase + '/LAMPAPI/register.' + extension;
 
     var xhr = new XMLHttpRequest();
@@ -100,8 +101,6 @@ function doRegister()
 
 
                 var jsonObject = JSON.parse(xhr.responseText);
-                console.log(xhr.response);
-
 
                 userId = jsonObject.id;
 
@@ -188,10 +187,7 @@ function displayChange(show, hide)
 
 function addContacts() {
 
-    document.getElementById("newContactFName").value = "";
-    document.getElementById("newContactLName").value = "";
-    document.getElementById("newContactEmail").value = "";
-    document.getElementById("newContactPhone").value = "";
+    readCookie();
 
     // Grab values from HTML
     var addedFName = document.getElementById("newContactFName").value;
@@ -203,7 +199,7 @@ function addContacts() {
     if (addedFName === null || addedFName === "" || addedLName === "" || addedLName === null){
         document.getElementById("added").innerHTML = "Please type in your First and/or Last Name";
         return;
-        }
+    }
     if (addedEmail === null || addedEmail === "" ||addedPhone === null || addedPhone === "")
     {
         document.getElementById("added").innerHTML = "Please enter a correct Email or Number";
@@ -213,7 +209,7 @@ function addContacts() {
     document.getElementById("added").innerHTML = "";
 
     var jsonPayload = JSON.stringify({firstName: addedFName,
-        lastName: addedLName, email: addedEmail, phone: addedPhone, userID: userId });
+        lastName: addedLName, emailAddress: addedEmail, phoneNumber: addedPhone, userId: userId });
 
     var url = urlBase + '/LAMPAPI/add.' + extension;
 
@@ -226,7 +222,7 @@ function addContacts() {
         xhr.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
                 document.getElementById("userName").innerHTML = "Contact has been added";
-                callSearch();
+
             }
         };
         xhr.send(jsonPayload);
@@ -253,6 +249,7 @@ function addContacts() {
 function doSearch()
 {
 
+    readCookie();
     accessIdForEdit = "";
     var lookUp = document.getElementById("searchText").value;
 
@@ -264,7 +261,7 @@ function doSearch()
         clearList.removeChild(clearList.lastChild);
 
 
-    var jsonPayload = JSON.stringify({search:lookUp, userid:userId});
+    var jsonPayload = JSON.stringify({search:lookUp, userId:userId});
     var url = urlBase + '/LAMPAPI/search.' + extension;
     var xhr = new XMLHttpRequest();
 
@@ -282,6 +279,7 @@ function doSearch()
                 for (var i = 0; i < jsonObject.results.length; i++) {
 
                     const contactId = jsonObject.results[i].ID;
+                    accessIdForEdit = contactId;
                     const firstName = jsonObject.results[i].firstName;
                     const lastName = jsonObject.results[i].lastName;
                     const email = jsonObject.results[i].email;
@@ -307,49 +305,8 @@ function doSearch()
                     editButton.type = "button";
                     editButton.className = "gotoEditButton";
                     editButton.addEventListener("click", function(){
-                        displayChange('cancelAddContactButton', 'logoutButton');
-                        displayChange('confirmEditButton', 'goToAddContactsButton');
-                        displayChange('addContactsDiv', 'searchContactsDiv');
-                        document.getElementById('userName').innerHTML = "Edit your contact's information:";
+                        doEdit();
 
-                        var accessParentForEdit = this.parentNode;
-                        accessIdForEdit = accessParentForEdit.id;
-
-                        // search by id and send new user input for edit to server.
-                        var jsonPayloadForEdit = JSON.stringify({ID: accessIdForEdit});
-                        var urlForEdit = urlBase + '/LAMPAPI/search.' + extension;
-
-                        var xhrForEdit = new XMLHttpRequest();
-                        xhrForEdit.open("POST", urlForEdit, true);
-                        xhrForEdit.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-
-                        try {
-
-                            xhrForEdit.onreadystatechange = function() {
-                                if (this.readyState === 4 && this.status === 200) {
-                                    var jsonObject = JSON.parse(xhr.responseText);
-
-                                    // contact vars
-                                    var firstName = jsonObject.results[0].firstName;
-                                    var lastName = jsonObject.results[0].lastName;
-                                    var email = jsonObject.results[0].email;
-                                    var phone = jsonObject.results[0].phone;
-
-
-                                    // assign vars to newContacts to be stored
-                                    document.getElementById("newContactFName").value = firstName;
-                                    document.getElementById("newContactLName").value = lastName;
-                                    document.getElementById("newContactEmail").value = email;
-                                    document.getElementById("newContactEmail").value = phone;
-                                }
-                            };
-                            xhr.send(jsonPayloadForEdit);
-                        }
-
-                        catch(err)
-                        {
-                            document.getElementById("userName").innerHTML = err.message;
-                        }
                     });
                     editButton.innerHTML = "Edit";
 
@@ -410,8 +367,8 @@ function doEdit()
 
     document.getElementById("added").innerHTML = "";
 
-    var jsonPayload = JSON.stringify({firstName: newContactsFirstName, lastName: newContactsLastName,
-        email: newContactsEmail, phone: newContactsPhone, ID: accessIdForEdit});
+    var jsonPayload = JSON.stringify({FirstName: newContactsFirstName, LastName: newContactsLastName,
+        email: newContactsEmail, PhoneNumber: newContactsPhone, userId: accessIdForEdit});
     var url = urlBase + '/LAMPAPI/update.' + extension;
 
     var xhr = new XMLHttpRequest();
