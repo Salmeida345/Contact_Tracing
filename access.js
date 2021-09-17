@@ -188,7 +188,6 @@ function displayChange(show, hide)
 function addContacts() {
 
     readCookie();
-
     // Grab values from HTML
     var addedFName = document.getElementById("newContactFName").value;
     var addedLName = document.getElementById("newContactLName").value;
@@ -206,6 +205,12 @@ function addContacts() {
         return;
     }
 
+    var tag = document.createElement("p"); // <p></p>
+    var text = document.createTextNode(addedFName + " " + addedLName + " " + addedEmail + " " + addedPhone);
+    tag.appendChild(text); // <p>TEST TEXT</p>
+    var element = document.getElementById("searchList");
+    element.appendChild(tag);
+
     document.getElementById("added").innerHTML = "";
 
     var jsonPayload = JSON.stringify({firstName: addedFName,
@@ -221,7 +226,8 @@ function addContacts() {
     {
         xhr.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
-                document.getElementById("userName").innerHTML = "Contact has been added";
+
+                document.getElementById("added").innerHTML = "Contact has been added";
 
             }
         };
@@ -229,10 +235,9 @@ function addContacts() {
     }
     catch(err)
     {
-        document.getElementById("userName").innerHTML = err.message;
+        document.getElementById("added").innerHTML = err.message;
     }
 
-    // deleted -- call search so that it refreshes after adding. (may reinstate)
 }
 // function callSearch()
 // {
@@ -248,17 +253,11 @@ function addContacts() {
 
 function doSearch()
 {
-
     readCookie();
     accessIdForEdit = "";
     var lookUp = document.getElementById("searchText").value;
 
-    document.getElementById("ContactsSearchResult").innerHTML = "";
-    var clearList = document.getElementById("ContactsList");
-
-    // Clear list
-    while (clearList.hasChildNodes())
-        clearList.removeChild(clearList.lastChild);
+    var searchList = "";
 
 
     var jsonPayload = JSON.stringify({search:lookUp, userId:userId});
@@ -267,97 +266,47 @@ function doSearch()
 
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-
-    try
-    {
-        xhr.onreadystatechange = function() {
+    try {
+        xhr.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
 
+                document.getElementById("contactSearchResult").innerHTML = "Search has been retrieved";
                 var jsonObject = JSON.parse(xhr.responseText);
 
-                // go through all current contacts
-                for (var i = 0; i < jsonObject.results.length; i++) {
+                window.addEventListener("load", function(){
+                    // (B) ATTACH KEY UP LISTENER TO SEARCH BOX
+                    document.getElementById("contactSearchResult").addEventListener("keyup", function(){
+                        // (C) GET THE SEARCH TERM
+                        var search = this.value.toLowerCase();
 
-                    const contactId = jsonObject.results[i].ID;
-                    accessIdForEdit = contactId;
-                    const firstName = jsonObject.results[i].firstName;
-                    const lastName = jsonObject.results[i].lastName;
-                    const email = jsonObject.results[i].email;
-                    const phone = jsonObject.results[i].phone;
+                        // (D) GET ALL LIST ITEMS
+                        var all = document.querySelectorAll("#searchList p");s
 
-                    // create content category of buttonElement type for future use
-                    const buttonElement = document.createElement("button");
-                    buttonElement.innerHTML = firstName + " " + lastName;
-                    buttonElement.id = contactId + ":searchable";
-                    buttonElement.className = "searchable";
-
-                    //create two new content categories and establish parenthood
-                    const divElement = document.createElement("divElement");
-                    const numAndEmail = document.createElement("numAndEmail");
-                    divElement.id = "" + contactId;
-                    numAndEmail.innerHTML = "Phone: " + phone + " Email: " + email;
-                    divElement.appendChild(numAndEmail);
-                    divElement.className = "info";
-
-
-                    // create edit and delete buttons
-                    const editButton = document.createElement("button");
-                    editButton.type = "button";
-                    editButton.className = "gotoEditButton";
-                    editButton.addEventListener("click", function(){
-                        doEdit();
-
-                    });
-                    editButton.innerHTML = "Edit";
-
-
-                    var deleteButton = document.createElement("button");
-                    deleteButton.type = "button";
-                    deleteButton.className = "gotoDeleteButton";
-                    deleteButton.addEventListener("click", function(){
-                        var accessParentToDelete = this.parentNode;
-                        accessIdForDeletion = accessParentToDelete.id;
-                        var popup = document.getElementById("finalizeDelete");
-                        popup.style.display = "block";
-                    });
-                    deleteButton.innerHTML = "Delete";
-
-                    // add buttonElement options just created to search
-                    divElement.appendChild(editButton);
-                    divElement.appendChild(deleteButton);
-
-                    //add the button with name and info back to id
-                    document.getElementById("ContactsList").appendChild(buttonElement);
-                    document.getElementById("ContactsList").appendChild(divElement);
-
-                    var accessButtons = this.classList;
-
-                    //sets height so that it isn't greater than it should be
-                    buttonElement.addEventListener("click", function () {
-                        accessButtons.toggle("active");
-                        var content = this.nextElementSibling;
-                        if (content.style.maxHeight) {
-                            content.style.maxHeight = null;
-                        } else {
-                            content.style.maxHeight = content.scrollHeight + "%";
+                        // (E) LOOP THROUGH LIST ITELS - ONLY SHOW ITEMS THAT MATCH SEARCH
+                        for (let i of all) {
+                            let item = i.innerHTML.toLowerCase();
+                            if (item.indexOf(search) === -1) { i.classList.add("hide"); }
+                            else { i.classList.remove("hide"); }
                         }
                     });
-                }
 
-                document.getElementById("userName").innerHTML = "Contact found";
+                document.getElementsByTagName("p")[0].innerHTML = searchList;
+                });
             }
         };
         xhr.send(jsonPayload);
     }
     catch(err)
     {
-        document.getElementById("userName").innerHTML = err.message;
+        document.getElementById("contactSearchResult").innerHTML = err.message;
     }
 }
 
+
 // another function called from html that finalizes changes
-function doEdit()
+function doEdit(contactId)
 {
+
     // finalizes changes
     var newContactsFirstName = document.getElementById("newContactFName").value;
     var newContactsLastName = document.getElementById("newContactLName").value;
@@ -368,7 +317,7 @@ function doEdit()
     document.getElementById("added").innerHTML = "";
 
     var jsonPayload = JSON.stringify({FirstName: newContactsFirstName, LastName: newContactsLastName,
-        email: newContactsEmail, PhoneNumber: newContactsPhone, userId: accessIdForEdit});
+        EmailAddress: newContactsEmail, PhoneNumber: newContactsPhone, UserID: userId, ContactID: contactId});
     var url = urlBase + '/LAMPAPI/update.' + extension;
 
     var xhr = new XMLHttpRequest();
@@ -388,15 +337,15 @@ function doEdit()
     doSearch();
 
     // go back to search contacts
-    callSearch();
 
     document.getElementById("userName").innerHTML = "Contact has been updated";
 }
 
+
 // called by HTML and commits deletion
-function doDelete()
+function doDelete(contactId)
 {
-    var jsonPayload = JSON.stringify({ID:accessIdForDeletion});
+    var jsonPayload = JSON.stringify({ ContactID: contactId, UserID: userId});
     var url = urlBase + '/LAMPAPI/delete.' + extension;
 
     var xhr = new XMLHttpRequest();

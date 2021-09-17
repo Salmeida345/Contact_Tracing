@@ -3,50 +3,40 @@
     <title>Contact Manager</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link id="mode" href="css/colors.css" rel="stylesheet">
-
-
-    <script type="text/javascript" src="js/access.js"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function()
+        {
+            readCookie();
+        }, false);
+    </script>
 
 </head>
 <body>
 
 
 <div class="box">
-    <button type="button" class="logoutButton" style="display:block" onclick="doLogout();"> Log Out </button>
+    <!-- login button -->
+    <div id="loginDiv" style="display:block">
+        <span id="userName"></span><br/>
+        <button type="button" class="logoutButton" style="display:block" onclick="doLogout();"> Log Out </button>
+    </div>
+
     <br></br>
 
     <h1>Contact Manager</h1>
 
 
 
-    <!-- login button -->
-    <div id="loginDiv" style="display:block">
-        <span id="userName"></span><br/>
-    </div>
+
 
     <!-- Contacts main page div -->
     <div id="mainPanel" style="display:block">
         <br />
-            <button type="button" onclick="displayChange('searchContactsDiv','mainPanel')"> Search </button>
+            <button type="button" onclick="displayChange('contactSearchDiv', 'mainPanel');" > Search</button>
         </br></br>
         <button type="button" id="goToAddContactsButton" style="display:block" onclick="displayChange('addContactsDiv', 'mainPanel');"> Add </button><br/>
 
         <br/><br />
-    </div>
-
-<!--Search Contacts-->
-    <div id = "searchContactsDiv" style=" display:none">
-        <input type="text" id="searchText" placeholder="Contacts To Search For"/>
-        <button type="button" id="confirmSearchButton" style="display:block" onclick="doSearch();"> Search </button></br>
-        <button type="button" id="confirmEditButton" style="display:none" onclick="doEdit();"> Update </button>
-        <button type="button" id="returnFromSearch" style="display:block" onclick="displayChange('mainPanel', 'searchContactsDiv');"
-        >Return to Page </button><br />
-        <div id="contactsListDiv">
-            <span id="ContactsSearchResult"></span>
-            <div id="ContactsList">
-            </div>
-        </div>
-
     </div>
 
     <!--    add contacts div screen-->
@@ -63,14 +53,51 @@
         <span id="added"></span>
     </div>
 
+    <table class = "contactSearchDiv" style = "display: none">
+        <input type="text" id="searchText" placeholder="Contacts To Search For"/>
+        <button type="button" id="confirmSearchButton" style="display:block" onclick="doSearch();"> Search </button></br>
+        <button type="button" id="returnFromSearch" style="display:block" onclick="displayChange('mainPanel', 'contactSearchDiv');">
+            Return to Page </button><br/>
+        <thead></thead>
+        <tbody></tbody>
+        <span id="contactSearchResult"></span>
+        <p id="searchList">
+        </p><br /><br/>
+    </table>
 
     <!-- Contains the components of the popup window that asks you to confirm deletion of a contact -->
     <div id="finalizeDelete" class="popup">
         <div id="popupContent">
             <button type="button" id="deleteButton" onclick="doDelete();"> Delete Contact </button>
+            <button type="button" id="editButton" onclick="displayChange('editContactDivForm', 'contactSearchDiv')"> Edit Contact </button>
 
         </div>
     </div>
+
+
+    <form id="editContactDivForm" style = "display: none">
+        <h2 id="title">Edit Contact</h2>
+        <label for="editedFirstName">First Name</label>
+        <input type="text" id="editedFirstName"><br>
+        <label for="editedLastName">Last Name</label>
+        <input type="text" id="editedLastName"><br>
+        <label for="editedEmail">Email</label>
+        <input type="email" id="editedEmail"><br>
+        <label for="editedPhoneNumber">Phone Number</label>
+        <input type="tel" id="editedPhoneNumber"><br>
+        <span id="contactID" style="display:none; visibility:hidden;"></span>
+        <span id="row" style="display:none; visibility:hidden;"></span>
+        <div class="modalButtonLayout">
+            <button type="button" id="submitContactBut" class="buttons" onclick="doEdit();">Submit</button>
+            <button type="button" id="cancelEditContactButton" class="buttons" onclick="displayChange('contactSearchDiv', 'editContactDivForm')">Cancel</button>
+            <span id="submitError"></span>
+        </div>
+    </form>
+
+
+
 </div>
 </body>
+<script type="text/javascript" src="js/access.js" defer></script>
+
 </html>
