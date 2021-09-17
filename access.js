@@ -205,11 +205,11 @@ function addContacts() {
         return;
     }
 
-    var tag = document.createElement("p"); // <p></p>
-    var text = document.createTextNode(addedFName + " " + addedLName + " " + addedEmail + " " + addedPhone);
-    tag.appendChild(text); // <p>TEST TEXT</p>
-    var element = document.getElementById("searchList");
-    element.appendChild(tag);
+    // var tag = document.createElement("p"); // <p></p>
+    // var text = document.createTextNode(addedFName + " " + addedLName + " " + addedEmail + " " + addedPhone);
+    // tag.appendChild(text); // <p>TEST TEXT</p>
+    // var element = document.getElementById("searchList");
+    // element.appendChild(tag);
 
     document.getElementById("added").innerHTML = "";
 
@@ -256,9 +256,13 @@ function doSearch()
     readCookie();
     accessIdForEdit = "";
     var lookUp = document.getElementById("searchText").value;
+    document.getElementById("contactSearchResult").innerHTML = "";
 
     var searchList = "";
-
+    var firstName1 = "";
+    var lastName1 = "";
+    var email1 = "";
+    var phone1 = "";
 
     var jsonPayload = JSON.stringify({search:lookUp, userId:userId});
     var url = urlBase + '/LAMPAPI/search.' + extension;
@@ -272,18 +276,21 @@ function doSearch()
 
                 document.getElementById("contactSearchResult").innerHTML = "Search has been retrieved";
                 var jsonObject = JSON.parse(xhr.responseText);
+                var sl = "";
+                for( var i=0; i<jsonObject.results.length; i++ ){
 
-                for( var i=0; i<jsonObject.results.length; i++ )
-                {
-                    searchList += jsonObject.results[i];
-                    if( i < jsonObject.results.length - 1 )
-                    {
-                        searchList += "<br />\r\n";
+                            searchList = jsonObject.results[i];
+                            firstName1 = searchList.firstName;
+                            lastName1 = searchList.lastName;
+                            email1 = searchList.email;
+                            phone1 = searchList.phone;
+
+                            if (i <= jsonObject.results.length - 1) {
+                                sl += "<br />\r\n\r\n";
+                            }
+                            sl+= firstName1 + " " + lastName1 + " " + email1 + " " + phone1;
                     }
-                }
-
-                document.getElementsByTagName("p")[0].innerHTML = searchList;
-
+                document.getElementsByTagName("p")[0].innerHTML = sl;
             }
         };
         xhr.send(jsonPayload);
@@ -293,7 +300,6 @@ function doSearch()
         document.getElementById("contactSearchResult").innerHTML = err.message;
     }
 }
-
 
 // another function called from html that finalizes changes
 function doEdit(contactId)
