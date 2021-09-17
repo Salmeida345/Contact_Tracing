@@ -2,26 +2,28 @@
 
 	$inData = getRequestInfo();
 
-	$conn = new mysqli("localhost", "TheBeast", "WeLoveCOP4331", "COP4331");
+	$conn = new mysqli("localhost", "ChiefHenny", "WeLoveCOP4331", "ContactTracing"); 
 	if ($conn->connect_error) 
 	{
 		returnWithError( $conn->connect_error );
 	} 
+
+	$FirstName = $inData["FirstName"];
+	$LastName = $inData["LastName"];
+	$PhoneNumber = $inData["PhoneNumber"];
+	$EmailAddress = $inData["EmailAddress"];
+		
+	if(!$FirstName || !$LastName || !$PhoneNumber || !$EmailAddress){
+			returnWithError("Sorry, all fields are required.");
+	}
+
 	else
 	{
-
-		$FirstName = $inData["FirstName"];
-		$LastName = $inData["LastName"];
-		$PhoneNumber = $inData["PhoneNumber"];
-		$Email = $inData["Email"];
 		
-		if(!$FirstName || !$LastName || !$PhoneNumber || !$Email){
-			echo "Sorry, all fields are required.";
-			}
-		
-		$stmt = $conn->prepare("UPDATE Contacts SET FirstName = 'FirstName', LastName = 'LastName', PhoneNumber = 'PhoneNumber', Email = 'Email' WHERE UserID=?");
+		$stmt = $conn->prepare("UPDATE Contacts SET FirstName=?, LastName=?, PhoneNumber=?, EmailAddress=? WHERE UserID=? AND ContactID=?");
+		$stmt->bind_param("ssssss", $FirstName, $LastName, $PhoneNumber, $EmailAddress, $inData["UserID"], $inData["ContactID"]);
 		$stmt->execute();
-			echo "Contact updated!";
+		echo "Contact updated!";
 		$stmt->close;
 	}
 
