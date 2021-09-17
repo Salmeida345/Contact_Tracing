@@ -273,25 +273,17 @@ function doSearch()
                 document.getElementById("contactSearchResult").innerHTML = "Search has been retrieved";
                 var jsonObject = JSON.parse(xhr.responseText);
 
-                window.addEventListener("load", function(){
-                    // (B) ATTACH KEY UP LISTENER TO SEARCH BOX
-                    document.getElementById("contactSearchResult").addEventListener("keyup", function(){
-                        // (C) GET THE SEARCH TERM
-                        var search = this.value.toLowerCase();
-
-                        // (D) GET ALL LIST ITEMS
-                        var all = document.querySelectorAll("#searchList p");s
-
-                        // (E) LOOP THROUGH LIST ITELS - ONLY SHOW ITEMS THAT MATCH SEARCH
-                        for (let i of all) {
-                            let item = i.innerHTML.toLowerCase();
-                            if (item.indexOf(search) === -1) { i.classList.add("hide"); }
-                            else { i.classList.remove("hide"); }
-                        }
-                    });
+                for( var i=0; i<jsonObject.results.length; i++ )
+                {
+                    searchList += jsonObject.results[i];
+                    if( i < jsonObject.results.length - 1 )
+                    {
+                        searchList += "<br />\r\n";
+                    }
+                }
 
                 document.getElementsByTagName("p")[0].innerHTML = searchList;
-                });
+
             }
         };
         xhr.send(jsonPayload);
