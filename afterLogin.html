@@ -32,7 +32,7 @@
     <!-- Contacts main page div -->
     <div id="mainPanel" style="display:block">
         <br />
-        <button type="button" onclick="displayChange('contactSearchDiv', 'mainPanel');" > Search</button>
+        <button type="button" onclick="displayChange('searchBox', 'mainPanel');" > Search</button>
         </br></br>
         <button type="button" id="goToAddContactsButton" style="display:block" onclick="displayChange('addContactsDiv', 'mainPanel');"> Add </button><br/>
 
@@ -53,24 +53,27 @@
         <span id="added"></span>
     </div>
 
+    <div id = "searchBox" style = "display: none">
+    <input type="text" id="searchText" onkeyup="doSearch();displayChange('contactSearchDiv', 'searchBox');" placeholder="Please Type or hit Enter"/>
+    </div>
+
     <div id = "contactSearchDiv" style = "display: none">
+        </br></br></br></br></br></br>
         </br></br></br>
-        <input type="text" id="searchText" onkeyup="doSearch();" placeholder="Please Type or hit Enter"/></br></br></br>
-
-
-
         <button type="button" id="editFromSearch" style="display:block" onclick="displayChange('editContactDivForm', 'contactSearchDiv');">
             Edit Contact </button><br/>
         <button type="button" id="deleteFromSearch" style="display:block" onclick="displayChange('deleteDiv', 'contactSearchDiv');">
             Delete Contact </button><br/></br>
-        <span id="contactSearchResult"></span>
+
         <div id = "searchList">
         </div><br /><br/>
 
         <button type="button" id="returnFromSearch" style="display:block" onclick="displayChange('mainPanel', 'contactSearchDiv');">
             Return to Page </button><br/>
     </div>
-<!--        <button type="button" id="confirmSearchButton" style="display:block"> Search </button></br>-->
+
+
+    <!--        <button type="button" id="confirmSearchButton" style="display:block"> Search </button></br>-->
 
 
 

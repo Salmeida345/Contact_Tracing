@@ -256,20 +256,9 @@ function doSearch()
     readCookie();
     accessIdForEdit = "";
     var lookUp = document.getElementById("searchText").value;
-    document.getElementById("contactSearchResult").innerHTML = "";
+    document.getElementById("searchList").innerHTML = "";
 
     var searchList = "";
-    var firstName1 = "";
-    var lastName1 = "";
-    var email1 = "";
-    var phone1 = "";
-
-
-    let myTable = document.querySelector('#searchList');
-    let headers = ['First Name', 'Last Name', 'Email', 'Phone Number'];
-
-
-
 
     var jsonPayload = JSON.stringify({search:lookUp, userId:userId});
     var url = urlBase + '/LAMPAPI/search.' + extension;
@@ -279,54 +268,75 @@ function doSearch()
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
     try {
         xhr.onreadystatechange = function () {
+
             if (this.readyState === 4 && this.status === 200) {
 
                 var jsonObject = JSON.parse(xhr.responseText);
 
-                var sl = "";
-                let table = document.createElement('table');
-                let headerRow = document.createElement('tr');
+                var table= document.createElement('table'),
+                    thead = document.createElement('thead'),
+                    tbody = document.createElement('tbody'),
+                    th,
+                    tr,
+                    td;
+                th = document.createElement('th'),
+                    th.innerHTML="id";
+                table.appendChild(th);
+                th = document.createElement('th');
+                th.innerHTML= "First Name";
+                table.appendChild(th);
+                th = document.createElement('th');
+                th.innerHTML= "Last Name";
+                table.appendChild(th);th = document.createElement('th');
+                th.innerHTML= "Phone Number";
+                table.appendChild(th);th = document.createElement('th');
+                th.innerHTML= "Email";
+                table.appendChild(th);
+                table.appendChild(thead);
+                table.appendChild(tbody);
 
-                headers.forEach(headerText => {
-                    let header = document.createElement('th');
-                    let textNode = document.createTextNode(headerText);
-                    header.appendChild(textNode);
-                    headerRow.appendChild(header);
-                });
+                document.body.appendChild(table);
 
-                table.appendChild(headerRow);
-                for( var i=0; i<jsonObject.results.length; i++ ) {
 
-                    let row = document.createElement('tr');
+                for (var i = 0; i < jsonObject.results.length; i++) {
+                    tr = document.createElement('tr'),
 
+                        //for id
+                    td= document.createElement('td');
                     searchList = jsonObject.results[i];
-                    firstName1 = searchList.firstName;
-                    lastName1 = searchList.lastName;
-                    email1 = searchList.email;
-                    phone1 = searchList.phone;
+                    td.innerHTML=searchList.id;
+                    tr.appendChild(td);
 
-                    if (i <= jsonObject.results.length - 1) {
-                        sl += "<br />\r\n\r\n";
-                    }
-                    sl = firstName1 + " " + lastName1 + " " + email1 + " " + phone1;
+                    //for fName
+                    td = document.createElement('td');
+                    td.innerHTML=searchList.firstName;
+                    tr.appendChild(td);
 
-                    let cell = document.createElement('td');
-                    let textNode = document.createTextNode(sl);
-                    cell.appendChild(textNode);
-                    row.appendChild(cell);
-                    table.appendChild(row);
+                    //for lName
+                    td = document.createElement('td');
+                    td.innerHTML=searchList.lastName;
+                    tr.appendChild(td);
+
+                     //for fName
+                    td = document.createElement('td');
+                    td.innerHTML=searchList.phone;
+                    tr.appendChild(td);
+
+                    //for fName
+                    td = document.createElement('td');
+                    td.innerHTML=searchList.email;
+                    tr.appendChild(td);
+
+                    tbody.appendChild(tr);
                 }
-
-                myTable.appendChild(table);
-
-                // document.getElementsByTagName("searchList").innerHTML = sl;
             }
+
         };
         xhr.send(jsonPayload);
     }
     catch(err)
     {
-        document.getElementById("contactSearchResult").innerHTML = err.message;
+        document.getElementById("searchList").innerHTML = err.message;
     }
 }
 
