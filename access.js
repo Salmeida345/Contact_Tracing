@@ -264,6 +264,13 @@ function doSearch()
     var email1 = "";
     var phone1 = "";
 
+
+    let myTable = document.querySelector('#searchList');
+    let headers = ['First Name', 'Last Name', 'Email', 'Phone Number'];
+
+
+
+
     var jsonPayload = JSON.stringify({search:lookUp, userId:userId});
     var url = urlBase + '/LAMPAPI/search.' + extension;
     var xhr = new XMLHttpRequest();
@@ -274,23 +281,45 @@ function doSearch()
         xhr.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
 
-                document.getElementById("contactSearchResult").innerHTML = "Search has been retrieved";
                 var jsonObject = JSON.parse(xhr.responseText);
+
                 var sl = "";
-                for( var i=0; i<jsonObject.results.length; i++ ){
+                let table = document.createElement('table');
+                let headerRow = document.createElement('tr');
 
-                            searchList = jsonObject.results[i];
-                            firstName1 = searchList.firstName;
-                            lastName1 = searchList.lastName;
-                            email1 = searchList.email;
-                            phone1 = searchList.phone;
+                headers.forEach(headerText => {
+                    let header = document.createElement('th');
+                    let textNode = document.createTextNode(headerText);
+                    header.appendChild(textNode);
+                    headerRow.appendChild(header);
+                });
 
-                            if (i <= jsonObject.results.length - 1) {
-                                sl += "<br />\r\n\r\n";
-                            }
-                            sl+= firstName1 + " " + lastName1 + " " + email1 + " " + phone1;
+                table.appendChild(headerRow);
+                for( var i=0; i<jsonObject.results.length; i++ ) {
+
+                    let row = document.createElement('tr');
+
+                    searchList = jsonObject.results[i];
+                    firstName1 = searchList.firstName;
+                    lastName1 = searchList.lastName;
+                    email1 = searchList.email;
+                    phone1 = searchList.phone;
+
+                    if (i <= jsonObject.results.length - 1) {
+                        sl += "<br />\r\n\r\n";
                     }
-                document.getElementsByTagName("p")[0].innerHTML = sl;
+                    sl = firstName1 + " " + lastName1 + " " + email1 + " " + phone1;
+
+                    let cell = document.createElement('td');
+                    let textNode = document.createTextNode(sl);
+                    cell.appendChild(textNode);
+                    row.appendChild(cell);
+                    table.appendChild(row);
+                }
+
+                myTable.appendChild(table);
+
+                // document.getElementsByTagName("searchList").innerHTML = sl;
             }
         };
         xhr.send(jsonPayload);

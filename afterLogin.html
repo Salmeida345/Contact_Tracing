@@ -32,7 +32,7 @@
     <!-- Contacts main page div -->
     <div id="mainPanel" style="display:block">
         <br />
-            <button type="button" onclick="displayChange('contactSearchDiv', 'mainPanel');" > Search</button>
+        <button type="button" onclick="displayChange('contactSearchDiv', 'mainPanel');" > Search</button>
         </br></br>
         <button type="button" id="goToAddContactsButton" style="display:block" onclick="displayChange('addContactsDiv', 'mainPanel');"> Add </button><br/>
 
@@ -53,25 +53,41 @@
         <span id="added"></span>
     </div>
 
-    <table class = "contactSearchDiv" style = "display: none">
-        <input type="text" id="searchText" placeholder="Contacts To Search For"/>
-        <button type="button" id="confirmSearchButton" style="display:block" onclick="doSearch();"> Search </button></br>
+    <div id = "contactSearchDiv" style = "display: none">
+        </br></br></br>
+        <input type="text" id="searchText" onkeyup="doSearch();" placeholder="Please Type or hit Enter"/></br></br></br>
+
+
+
+        <button type="button" id="editFromSearch" style="display:block" onclick="displayChange('editContactDivForm', 'contactSearchDiv');">
+            Edit Contact </button><br/>
+        <button type="button" id="deleteFromSearch" style="display:block" onclick="displayChange('deleteDiv', 'contactSearchDiv');">
+            Delete Contact </button><br/></br>
+        <span id="contactSearchResult"></span>
+        <div id = "searchList">
+        </div><br /><br/>
+
         <button type="button" id="returnFromSearch" style="display:block" onclick="displayChange('mainPanel', 'contactSearchDiv');">
             Return to Page </button><br/>
-        <thead></thead>
-        <tbody></tbody>
-        <span id="contactSearchResult"></span>
-        <p id="searchList">
-        </p><br /><br/>
-    </table>
+    </div>
+<!--        <button type="button" id="confirmSearchButton" style="display:block"> Search </button></br>-->
 
-    <!-- Contains the components of the popup window that asks you to confirm deletion of a contact -->
-    <div id="finalizeDelete" class="popup">
-        <div id="popupContent">
-            <button type="button" id="deleteButton" onclick="doDelete();"> Delete Contact </button>
-            <button type="button" id="editButton" onclick="displayChange('editContactDivForm', 'contactSearchDiv')"> Edit Contact </button>
 
-        </div>
+
+
+<!--    &lt;!&ndash; Contains the components of the popup window that asks you to confirm deletion of a contact &ndash;&gt;-->
+<!--    <div id="finalizeDelete" class="popup">-->
+<!--        <div id="popupContent">-->
+<!--            <button type="button" id="deleteButton" onclick="doDelete();"> Delete Contact </button>-->
+<!--            <button type="button" id="editButton" onclick="displayChange('editContactDivForm', 'contactSearchDiv')"> Edit Contact </button>-->
+
+<!--        </div>-->
+<!--    </div>-->
+
+    <div id = "deleteDiv" style ="display: none">
+        <input type="text" id = "deleteContact">  Confirm you want to delete </input>
+        <button type="button" id="delete" style="display:block" onclick="displayChange('contactSearchDiv', 'deleteDiv');">
+        Confirm Delete </button><br/>
     </div>
 
 
