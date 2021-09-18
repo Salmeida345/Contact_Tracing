@@ -344,8 +344,13 @@ function doSearch()
     displayChange('contactSearchDiv', 'searchBox');
 }
 
+function hide(hide){
+    document.getElementById(hide).style.display="none";
+
+}
+
 function filterSearch() {
-    var input, filter, table, tr, i;
+    var input, filter, table, tr, td, i;
     input = document.getElementById("searchText");
     filter = input.value.toUpperCase();
     table = document.getElementById("myTable");
