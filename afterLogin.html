@@ -3,6 +3,7 @@
     <title>Contact Manager</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link id="mode" href="css/colors.css" rel="stylesheet">
+    <script type="text/javascript" src="js/access.js" defer></script>
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function()
         {
@@ -54,10 +55,12 @@
     </div>
 
     <div id = "searchBox" style = "display: none">
-    <input type="text" id="searchText" onkeyup="doSearch();displayChange('contactSearchDiv', 'searchBox');" placeholder="Please Type or hit Enter"/>
+        <button type="button" id="searchBox1" style="display:block" onclick="doSearch();
+        displayChange('contactSearchDiv', 'searchBox');"> Really Search </button><br />
     </div>
 
     <div id = "contactSearchDiv" style = "display: none">
+        <input type="text" id="searchText" onkeyup="filterSearch();" placeholder="Type who you want." />
         </br></br></br></br></br></br>
         </br></br></br>
         <button type="button" id="editFromSearch" style="display:block" onclick="displayChange('editContactDivForm', 'contactSearchDiv');">
@@ -73,24 +76,20 @@
     </div>
 
 
-    <!--        <button type="button" id="confirmSearchButton" style="display:block"> Search </button></br>-->
 
+    <!--    &lt;!&ndash; Contains the components of the popup window that asks you to confirm deletion of a contact &ndash;&gt;-->
+    <!--    <div id="finalizeDelete" class="popup">-->
+    <!--        <div id="popupContent">-->
+    <!--            <button type="button" id="deleteButton" onclick="doDelete();"> Delete Contact </button>-->
+    <!--            <button type="button" id="editButton" onclick="displayChange('editContactDivForm', 'contactSearchDiv')"> Edit Contact </button>-->
 
-
-
-<!--    &lt;!&ndash; Contains the components of the popup window that asks you to confirm deletion of a contact &ndash;&gt;-->
-<!--    <div id="finalizeDelete" class="popup">-->
-<!--        <div id="popupContent">-->
-<!--            <button type="button" id="deleteButton" onclick="doDelete();"> Delete Contact </button>-->
-<!--            <button type="button" id="editButton" onclick="displayChange('editContactDivForm', 'contactSearchDiv')"> Edit Contact </button>-->
-
-<!--        </div>-->
-<!--    </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
 
     <div id = "deleteDiv" style ="display: none">
         <input type="text" id = "deleteContact">  Confirm you want to delete </input>
         <button type="button" id="delete" style="display:block" onclick="displayChange('contactSearchDiv', 'deleteDiv');">
-        Confirm Delete </button><br/>
+            Confirm Delete </button><br/>
     </div>
 
 
@@ -117,6 +116,8 @@
 
 </div>
 </body>
-<script type="text/javascript" src="js/access.js" defer></script>
+<script>
+
+</script>
 
 </html>

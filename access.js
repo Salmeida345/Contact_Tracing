@@ -279,10 +279,12 @@ function doSearch()
                     th,
                     tr,
                     td;
-                th = document.createElement('th'),
+                th = document.createElement('th');
                     th.innerHTML="id";
                 table.appendChild(th);
                 th = document.createElement('th');
+                table.id = "myTable"
+                table.style.display = "block";
                 th.innerHTML= "First Name";
                 table.appendChild(th);
                 th = document.createElement('th');
@@ -298,11 +300,11 @@ function doSearch()
                 document.body.appendChild(table);
 
 
-                for (var i = 0; i < jsonObject.results.length; i++) {
+                for (var i = 0; i <= jsonObject.results.length -1; i++) {
                     tr = document.createElement('tr'),
 
                         //for id
-                    td= document.createElement('td');
+                        td= document.createElement('td');
                     searchList = jsonObject.results[i];
                     td.innerHTML=searchList.id;
                     tr.appendChild(td);
@@ -317,7 +319,7 @@ function doSearch()
                     td.innerHTML=searchList.lastName;
                     tr.appendChild(td);
 
-                     //for fName
+                    //for fName
                     td = document.createElement('td');
                     td.innerHTML=searchList.phone;
                     tr.appendChild(td);
@@ -337,6 +339,32 @@ function doSearch()
     catch(err)
     {
         document.getElementById("searchList").innerHTML = err.message;
+    }
+
+    displayChange('contactSearchDiv', 'searchBox');
+}
+
+function filterSearch() {
+    var input, filter, table, tr, i;
+    input = document.getElementById("searchText");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td") ;
+        for(j=0 ; j<td.length ; j++)
+        {
+            let tdata = td[j] ;
+            if (tdata) {
+                if (tdata.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    break ;
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
     }
 }
 
