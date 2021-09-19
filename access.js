@@ -233,33 +233,18 @@ function addContacts() {
         document.getElementById("added").innerHTML = err.message;
     }
 
-}
-// function callSearch()
-// {
-//     displayChange('goToAddContactsButton','addContactsButton');
-//     displayChange('goToAddContactsButton', 'confirmEditButton');
-//     displayChange('searchContactsDiv', 'addContactsDiv');
-//
-//     accessIdForEdit = "";
-//
-//     doSearch();
-//
-// }
+    //    All functions before this point WORKING.  Past this point the may needs some fixing.
 
+// performs a search from all contacts in database and assigns them to a table with style.display = "none"
+// main objective is to build a table to work from in filterSearch() function.
 function doSearch()
 {
     readCookie();
     accessIdForEdit = "";
     var lookUp = document.getElementById("searchText").value;
-    document.getElementById("searchList").innerHTML = "";
+    var searchList = document.getElementById("searchList").innerHTML;
 
-    // var searchResultTable = document.getElementById("myTable");
-    // while(searchResultTable.firstChild)
-    // {
-    //     searchResultTable.removeChild(searchResultTable.firstChild);
-    // }
-
-    var searchList = "";
+    searchList = "";
     var contactSearchDiv = document.getElementById('contactSearchDiv');
 
     var jsonPayload = JSON.stringify({search:lookUp, userId:userId});
@@ -286,7 +271,7 @@ function doSearch()
                 table.appendChild(th);
                 th = document.createElement('th');
                 table.id = "myTable"
-                table.style.display = "block";
+                table.style.display = "none";
                 th.innerHTML= "First Name";
                 table.appendChild(th);
                 th = document.createElement('th');
@@ -364,22 +349,28 @@ function doSearch()
     // displayChange('contactSearchDiv', 'searchBox');
 }
 
+// an attempt to clear the table.  Is not currently working.
 function clearTable(){
-    var table = document.querySelector("#myTable");
+    var table = document.querySelector("#mySearchTable");
 
     while (table.firstChild){
         table.removeChild(table.firstChild);
     }
 }
 
+// clones (hidden table created in doSearch()) MyTable, attaches to "contactSearchDiv"
+// and performs filter search on newly cloned table
 function filterSearch() {
-
-
-    var input, filter, table, tr, td, i;
+    var input, filter, table, div, tr, td, i;
     input = document.getElementById("searchText");
     filter = input.value.toUpperCase();
     table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("tr");
+    div = document.getElementById("contactSearchDiv");
+    var cloneTable = table.cloneNode(true);
+    div.appendChild(cloneTable);
+    cloneTable.style.display = "";
+    cloneTable.id = "mySearchTable";
+    tr = cloneTable.getElementsByTagName("tr");
 
     for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td") ;
