@@ -195,12 +195,11 @@ function addContacts() {
     var addedPhone = document.getElementById("newContactPhone").value;
 
     // checks that info is good
-    if (addedFName === null || addedFName === "" || addedLName === "" || addedLName === null){
+    if (addedFName === null || addedFName === "" || addedLName === "" || addedLName === null) {
         document.getElementById("added").innerHTML = "Please type in your First and/or Last Name";
         return;
     }
-    if (addedEmail === null || addedEmail === "" ||addedPhone === null || addedPhone === "")
-    {
+    if (addedEmail === null || addedEmail === "" || addedPhone === null || addedPhone === "") {
         document.getElementById("added").innerHTML = "Please enter a correct Email or Number";
         return;
     }
@@ -208,8 +207,10 @@ function addContacts() {
 
     document.getElementById("added").innerHTML = "";
 
-    var jsonPayload = JSON.stringify({firstName: addedFName,
-        lastName: addedLName, emailAddress: addedEmail, phoneNumber: addedPhone, userId: userId });
+    var jsonPayload = JSON.stringify({
+        firstName: addedFName,
+        lastName: addedLName, emailAddress: addedEmail, phoneNumber: addedPhone, userId: userId
+    });
 
     var url = urlBase + '/LAMPAPI/add.' + extension;
 
@@ -217,9 +218,8 @@ function addContacts() {
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
-    try
-    {
-        xhr.onreadystatechange = function() {
+    try {
+        xhr.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
 
                 document.getElementById("added").innerHTML = "Contact has been added";
@@ -227,228 +227,226 @@ function addContacts() {
             }
         };
         xhr.send(jsonPayload);
-    }
-    catch(err)
-    {
+    } catch (err) {
         document.getElementById("added").innerHTML = err.message;
     }
-
+}
     //    All functions before this point WORKING.  Past this point the may needs some fixing.
 
 // performs a search from all contacts in database and assigns them to a table with style.display = "none"
 // main objective is to build a table to work from in filterSearch() function.
-function doSearch()
-{
-    readCookie();
-    accessIdForEdit = "";
-    var lookUp = document.getElementById("searchText").value;
-    var searchList = document.getElementById("searchList").innerHTML;
-
-    searchList = "";
-    var contactSearchDiv = document.getElementById('contactSearchDiv');
-
-    var jsonPayload = JSON.stringify({search:lookUp, userId:userId});
-    var url = urlBase + '/LAMPAPI/search.' + extension;
-    var xhr = new XMLHttpRequest();
-
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-    try {
-        xhr.onreadystatechange = function () {
-
-            if (this.readyState === 4 && this.status === 200) {
-
-                var jsonObject = JSON.parse(xhr.responseText);
-
-                var table= document.createElement('table'),
-                    thead = document.createElement('thead'),
-                    tbody = document.createElement('tbody'),
-                    th,
-                    tr,
-                    td;
-                th = document.createElement('th');
-                    th.innerHTML="id";
-                table.appendChild(th);
-                th = document.createElement('th');
-                table.id = "myTable"
-                table.style.display = "none";
-                th.innerHTML= "First Name";
-                table.appendChild(th);
-                th = document.createElement('th');
-                th.innerHTML= "Last Name";
-                table.appendChild(th);th = document.createElement('th');
-                th.innerHTML= "Phone Number";
-                table.appendChild(th);th = document.createElement('th');
-                th.innerHTML= "Email";
-                table.appendChild(th);
-                table.appendChild(thead);
-                table.appendChild(tbody);
-
-                contactSearchDiv.appendChild(table);
-
-
-                for (var i = 0; i <= jsonObject.results.length -1; i++) {
-                    tr = document.createElement('tr'),
-
-                    //for id
-                    td= document.createElement('td');
-                    searchList = jsonObject.results[i];
-                    td.innerHTML=searchList.id;
-                    tr.appendChild(td);
-
-                    //for fName
-                    td = document.createElement('td');
-                    td.innerHTML=searchList.firstName;
-                    tr.appendChild(td);
-
-                    //for lName
-                    td = document.createElement('td');
-                    td.innerHTML=searchList.lastName;
-                    tr.appendChild(td);
-
-                    //for fName
-                    td = document.createElement('td');
-                    td.innerHTML=searchList.phone;
-                    tr.appendChild(td);
-
-                    //for fName
-                    td = document.createElement('td');
-                    td.innerHTML=searchList.email;
-                    tr.appendChild(td);
-
-                    var deleteButton = document.createElement("button");
-                    deleteButton.type = "button";
-                    deleteButton.id = searchList.id + " " + (i+1); // Embedding contact ID and row number info in button ID
-                    deleteButton.className = "button";
-                    deleteButton.addEventListener("onclick",  doDelete, false);
-                    deleteButton.innerHTML = "Delete";
-                    var editButton = document.createElement("button");
-                    editButton.type = "button";
-                    editButton.id = searchList.id + " " + (i+1); // Embedding contact ID and row number info in button ID
-                    editButton.className = "button";
-                    editButton.addEventListener("onclick", doEdit,false);
-                    editButton.innerHTML = "Edit";
-
-                    tr.appendChild(deleteButton);
-                    tr.appendChild(editButton);
-                    tbody.appendChild(tr);
-
-
-                }
-            }
-
-
-        };
-        xhr.send(jsonPayload);
-    }
-    catch(err)
+    function doSearch()
     {
-        document.getElementById("searchList").innerHTML = err.message;
-    }
+        readCookie();
+        accessIdForEdit = "";
+        var lookUp = document.getElementById("searchText").value;
+        var searchList = document.getElementById("searchList").innerHTML;
 
-    // displayChange('contactSearchDiv', 'searchBox');
-}
+        searchList = "";
+        var contactSearchDiv = document.getElementById('contactSearchDiv');
+
+        var jsonPayload = JSON.stringify({search:lookUp, userId:userId});
+        var url = urlBase + '/LAMPAPI/search.' + extension;
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+        try {
+            xhr.onreadystatechange = function () {
+
+                if (this.readyState === 4 && this.status === 200) {
+
+                    var jsonObject = JSON.parse(xhr.responseText);
+
+                    var table= document.createElement('table'),
+                        thead = document.createElement('thead'),
+                        tbody = document.createElement('tbody'),
+                        th,
+                        tr,
+                        td;
+                    th = document.createElement('th');
+                    th.innerHTML="id";
+                    table.appendChild(th);
+                    th = document.createElement('th');
+                    table.id = "myTable"
+                    table.style.display = "none";
+                    th.innerHTML= "First Name";
+                    table.appendChild(th);
+                    th = document.createElement('th');
+                    th.innerHTML= "Last Name";
+                    table.appendChild(th);th = document.createElement('th');
+                    th.innerHTML= "Phone Number";
+                    table.appendChild(th);th = document.createElement('th');
+                    th.innerHTML= "Email";
+                    table.appendChild(th);
+                    table.appendChild(thead);
+                    table.appendChild(tbody);
+
+                    contactSearchDiv.appendChild(table);
+
+
+                    for (var i = 0; i <= jsonObject.results.length -1; i++) {
+                        tr = document.createElement('tr'),
+
+                            //for id
+                            td= document.createElement('td');
+                        searchList = jsonObject.results[i];
+                        td.innerHTML=searchList.id;
+                        tr.appendChild(td);
+
+                        //for fName
+                        td = document.createElement('td');
+                        td.innerHTML=searchList.firstName;
+                        tr.appendChild(td);
+
+                        //for lName
+                        td = document.createElement('td');
+                        td.innerHTML=searchList.lastName;
+                        tr.appendChild(td);
+
+                        //for fName
+                        td = document.createElement('td');
+                        td.innerHTML=searchList.phone;
+                        tr.appendChild(td);
+
+                        //for fName
+                        td = document.createElement('td');
+                        td.innerHTML=searchList.email;
+                        tr.appendChild(td);
+
+                        var deleteButton = document.createElement("button");
+                        deleteButton.type = "button";
+                        deleteButton.id = searchList.id + " " + (i+1); // Embedding contact ID and row number info in button ID
+                        deleteButton.className = "button";
+                        deleteButton.addEventListener("onclick",  doDelete, false);
+                        deleteButton.innerHTML = "Delete";
+                        var editButton = document.createElement("button");
+                        editButton.type = "button";
+                        editButton.id = searchList.id + " " + (i+1); // Embedding contact ID and row number info in button ID
+                        editButton.className = "button";
+                        editButton.addEventListener("onclick", doEdit,false);
+                        editButton.innerHTML = "Edit";
+
+                        tr.appendChild(deleteButton);
+                        tr.appendChild(editButton);
+                        tbody.appendChild(tr);
+
+
+                    }
+                }
+
+
+            };
+            xhr.send(jsonPayload);
+        }
+        catch(err)
+        {
+            document.getElementById("searchList").innerHTML = err.message;
+        }
+
+        // displayChange('contactSearchDiv', 'searchBox');
+    }
 
 // an attempt to clear the table.  Is not currently working.
-function clearTable(){
-    var table = document.querySelector("#mySearchTable");
+    function clearTable(){
+        var table = document.querySelector("#mySearchTable");
 
-    while (table.firstChild){
-        table.removeChild(table.firstChild);
+        while (table.firstChild){
+            table.removeChild(table.firstChild);
+        }
     }
-}
 
 // clones (hidden table created in doSearch()) MyTable, attaches to "contactSearchDiv"
 // and performs filter search on newly cloned table
-function filterSearch() {
-    var input, filter, table, div, tr, td, i;
-    input = document.getElementById("searchText");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    div = document.getElementById("contactSearchDiv");
-    var cloneTable = table.cloneNode(true);
-    div.appendChild(cloneTable);
-    cloneTable.style.display = "";
-    cloneTable.id = "mySearchTable";
-    tr = cloneTable.getElementsByTagName("tr");
+    function filterSearch() {
+        var input, filter, table, div, tr, td, i;
+        input = document.getElementById("searchText");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        div = document.getElementById("contactSearchDiv");
+        var cloneTable = table.cloneNode(true);
+        div.appendChild(cloneTable);
+        cloneTable.style.display = "block";
+        cloneTable.id = "mySearchTable";
+        tr = cloneTable.getElementsByTagName("tr");
 
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td") ;
-        for(j=0 ; j<td.length ; j++)
-        {
-            let tdata = td[j] ;
-            if (tdata) {
-                if (tdata.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                    break ;
-                } else {
-                    tr[i].style.display = "none";
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td") ;
+            for(j=0 ; j<td.length ; j++)
+            {
+                let tdata = td[j] ;
+                if (tdata) {
+                    if (tdata.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "block";
+                        break ;
+                    } else {
+                        tr[i].style.display = "none";
+                    }
                 }
             }
         }
     }
-}
 
 // another function called from html that finalizes changes
-function doEdit()
-{
-
-    // finalizes changes
-    var newContactsFirstName = document.getElementById("newContactFName").value;
-    var newContactsLastName = document.getElementById("newContactLName").value;
-    var newContactsEmail = document.getElementById("newContactEmail").value;
-    var newContactsPhone = document.getElementById("newContactPhone").value;
-
-
-    document.getElementById("added").innerHTML = "";
-
-    var jsonPayload = JSON.stringify({FirstName: newContactsFirstName, LastName: newContactsLastName,
-        EmailAddress: newContactsEmail, PhoneNumber: newContactsPhone, UserID: userId, ContactID: this.id});
-    var url = urlBase + '/LAMPAPI/update.' + extension;
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-
-    try
+    function doEdit()
     {
-        xhr.send(jsonPayload);
+
+        // finalizes changes
+        var newContactsFirstName = document.getElementById("newContactFName").value;
+        var newContactsLastName = document.getElementById("newContactLName").value;
+        var newContactsEmail = document.getElementById("newContactEmail").value;
+        var newContactsPhone = document.getElementById("newContactPhone").value;
+
+
+        document.getElementById("added").innerHTML = "";
+
+        var jsonPayload = JSON.stringify({FirstName: newContactsFirstName, LastName: newContactsLastName,
+            EmailAddress: newContactsEmail, PhoneNumber: newContactsPhone, UserID: userId, ContactID: this.id});
+        var url = urlBase + '/LAMPAPI/update.' + extension;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+        try
+        {
+            xhr.send(jsonPayload);
+        }
+        catch(err)
+        {
+            document.getElementById("userName").innerHTML = err.message;
+        }
+
+        // call search so list refreshes
+        doSearch();
+
+        // go back to search contacts
+
+        document.getElementById("userName").innerHTML = "Contact has been updated";
     }
-    catch(err)
-    {
-        document.getElementById("userName").innerHTML = err.message;
-    }
-
-    // call search so list refreshes
-    doSearch();
-
-    // go back to search contacts
-
-    document.getElementById("userName").innerHTML = "Contact has been updated";
-}
 
 
 // called by HTML and commits deletion
-function doDelete()
-{
-    var jsonPayload = JSON.stringify({ ContactID: this.id, UserID: userId});
-    var url = urlBase + '/LAMPAPI/delete.' + extension;
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-
-    try
+    function doDelete()
     {
-        xhr.send(jsonPayload);
-    }
-    catch(err)
-    {
-        document.getElementById("userName").innerHTML = err.message;
-    }
+        var jsonPayload = JSON.stringify({ ContactID: this.id, UserID: userId});
+        var url = urlBase + '/LAMPAPI/delete.' + extension;
 
-    // call search so that list refreshes
-    doSearch();
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
-    document.getElementById("userName").innerHTML = "Contact has been deleted";
-}
+        try
+        {
+            xhr.send(jsonPayload);
+        }
+        catch(err)
+        {
+            document.getElementById("userName").innerHTML = err.message;
+        }
+
+        // call search so that list refreshes
+        doSearch();
+
+        document.getElementById("userName").innerHTML = "Contact has been deleted";
+    }
