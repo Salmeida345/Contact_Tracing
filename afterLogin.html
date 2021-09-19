@@ -62,9 +62,7 @@
 
     <!-- Alright.  This is where most of the problems are occurring.  The edit and delete buttons are self-explanatory.  The table
     is loaded and filtered on searchText by calling filterSearch() when the user types in any key
-    A new searchTable appears to be created every time searchBox() gets clicked and superimposes itself onto the prior tables and buttons and causes
-    the big mess you see.  I attempt to hide the table with contactSearchDiv's returnFromSearch button, but it only seems to do it once, and
-      doesn't clear the former table.  May need to find a way to clear and hide the table in .js-->
+    A new searchTable appears to be created every time searchBox() gets clicked i.e., every time anything is added or removed from input element-->
     <div id = "contactSearchDiv" style = "display: none">
 
         <button type="button" id="editFromSearch" style="display:block" onclick="displayChange('editContactDivForm', 'contactSearchDiv');">
@@ -76,7 +74,7 @@
         <br/><br/><br/><br/>
         <div id = "searchList">
         </div><br/>
-        <button type="button" id="returnFromSearch" style="display:block" onclick="displayChange('mainPanel', 'contactSearchDiv'); clearTable();">
+        <button type="button" id="returnFromSearch" style="display:block" onclick="displayChange('mainPanel', 'contactSearchDiv'); /*clearTable();*/">
             Return to Page </button><br/>
     </div>
 
