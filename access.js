@@ -260,6 +260,7 @@ function doSearch()
     // }
 
     var searchList = "";
+    var contactSearchDiv = document.getElementById('contactSearchDiv');
 
     var jsonPayload = JSON.stringify({search:lookUp, userId:userId});
     var url = urlBase + '/LAMPAPI/search.' + extension;
@@ -298,7 +299,7 @@ function doSearch()
                 table.appendChild(thead);
                 table.appendChild(tbody);
 
-                document.body.appendChild(table);
+                contactSearchDiv.appendChild(table);
 
 
                 for (var i = 0; i <= jsonObject.results.length -1; i++) {
@@ -363,11 +364,17 @@ function doSearch()
     // displayChange('contactSearchDiv', 'searchBox');
 }
 
-function hide(hide){
-    document.getElementById(hide).style.display="none";
+function clearTable(){
+    var table = document.querySelector("#myTable");
+
+    while (table.firstChild){
+        table.removeChild(table.firstChild);
+    }
 }
 
 function filterSearch() {
+
+
     var input, filter, table, tr, td, i;
     input = document.getElementById("searchText");
     filter = input.value.toUpperCase();
