@@ -205,11 +205,6 @@ function addContacts() {
         return;
     }
 
-    // var tag = document.createElement("p"); // <p></p>
-    // var text = document.createTextNode(addedFName + " " + addedLName + " " + addedEmail + " " + addedPhone);
-    // tag.appendChild(text); // <p>TEST TEXT</p>
-    // var element = document.getElementById("searchList");
-    // element.appendChild(tag);
 
     document.getElementById("added").innerHTML = "";
 
@@ -258,6 +253,12 @@ function doSearch()
     var lookUp = document.getElementById("searchText").value;
     document.getElementById("searchList").innerHTML = "";
 
+    // var searchResultTable = document.getElementById("myTable");
+    // while(searchResultTable.firstChild)
+    // {
+    //     searchResultTable.removeChild(searchResultTable.firstChild);
+    // }
+
     var searchList = "";
 
     var jsonPayload = JSON.stringify({search:lookUp, userId:userId});
@@ -303,8 +304,8 @@ function doSearch()
                 for (var i = 0; i <= jsonObject.results.length -1; i++) {
                     tr = document.createElement('tr'),
 
-                        //for id
-                        td= document.createElement('td');
+                    //for id
+                    td= document.createElement('td');
                     searchList = jsonObject.results[i];
                     td.innerHTML=searchList.id;
                     tr.appendChild(td);
@@ -329,9 +330,27 @@ function doSearch()
                     td.innerHTML=searchList.email;
                     tr.appendChild(td);
 
+                    var deleteButton = document.createElement("button");
+                    deleteButton.type = "button";
+                    deleteButton.id = searchList.id + " " + (i+1); // Embedding contact ID and row number info in button ID
+                    deleteButton.className = "button";
+                    deleteButton.addEventListener("onclick",  doDelete, false);
+                    deleteButton.innerHTML = "Delete";
+                    var editButton = document.createElement("button");
+                    editButton.type = "button";
+                    editButton.id = searchList.id + " " + (i+1); // Embedding contact ID and row number info in button ID
+                    editButton.className = "button";
+                    editButton.addEventListener("onclick", doEdit,false);
+                    editButton.innerHTML = "Edit";
+
+                    tr.appendChild(deleteButton);
+                    tr.appendChild(editButton);
                     tbody.appendChild(tr);
+
+
                 }
             }
+
 
         };
         xhr.send(jsonPayload);
@@ -341,12 +360,11 @@ function doSearch()
         document.getElementById("searchList").innerHTML = err.message;
     }
 
-    displayChange('contactSearchDiv', 'searchBox');
+    // displayChange('contactSearchDiv', 'searchBox');
 }
 
 function hide(hide){
     document.getElementById(hide).style.display="none";
-
 }
 
 function filterSearch() {
@@ -374,7 +392,7 @@ function filterSearch() {
 }
 
 // another function called from html that finalizes changes
-function doEdit(contactId)
+function doEdit()
 {
 
     // finalizes changes
@@ -387,7 +405,7 @@ function doEdit(contactId)
     document.getElementById("added").innerHTML = "";
 
     var jsonPayload = JSON.stringify({FirstName: newContactsFirstName, LastName: newContactsLastName,
-        EmailAddress: newContactsEmail, PhoneNumber: newContactsPhone, UserID: userId, ContactID: contactId});
+        EmailAddress: newContactsEmail, PhoneNumber: newContactsPhone, UserID: userId, ContactID: this.id});
     var url = urlBase + '/LAMPAPI/update.' + extension;
 
     var xhr = new XMLHttpRequest();
@@ -413,9 +431,9 @@ function doEdit(contactId)
 
 
 // called by HTML and commits deletion
-function doDelete(contactId)
+function doDelete()
 {
-    var jsonPayload = JSON.stringify({ ContactID: contactId, UserID: userId});
+    var jsonPayload = JSON.stringify({ ContactID: this.id, UserID: userId});
     var url = urlBase + '/LAMPAPI/delete.' + extension;
 
     var xhr = new XMLHttpRequest();
@@ -430,12 +448,6 @@ function doDelete(contactId)
     {
         document.getElementById("userName").innerHTML = err.message;
     }
-
-    // close popup
-    var popup = document.getElementById("finalizeDelete");
-    popup.style.display = "none";
-
-    accessIdForDeletion = "";
 
     // call search so that list refreshes
     doSearch();

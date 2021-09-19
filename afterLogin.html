@@ -14,33 +14,31 @@
 </head>
 <body>
 
-
+<!--div box wraps around entire body.  Used for styling purposes-->
 <div class="box">
-    <!-- login button -->
+
+
+    <!-- logout button WORKS FINE-->
     <div id="loginDiv" style="display:block">
         <span id="userName"></span><br/>
         <button type="button" class="logoutButton" style="display:block" onclick="doLogout();"> Log Out </button>
     </div>
 
-    <br></br>
 
     <h1>Contact Manager</h1>
 
 
-
-
-
-    <!-- Contacts main page div -->
+    <!-- Contacts main page div WORKS FINE-->
     <div id="mainPanel" style="display:block">
         <br />
         <button type="button" onclick="displayChange('searchBox', 'mainPanel');" > Search</button>
-        </br></br>
+        <br/><br/>
         <button type="button" id="goToAddContactsButton" style="display:block" onclick="displayChange('addContactsDiv', 'mainPanel');"> Add </button><br/>
 
         <br/><br />
     </div>
 
-    <!--    add contacts div screen-->
+    <!--    add contacts div screen WORKS FINE-->
     <div id="addContactsDiv" style="display:none">
         <br/>
         <input type="text" id="newContactFName" placeholder="Contact's First Name">
@@ -54,55 +52,53 @@
         <span id="added"></span>
     </div>
 
+    <!--  searchBox div is called from main panel.  The reason for this intermediary button is that I want to be able to call doSearch() before
+    filtering.  This is necessary because doSearch() handles the loading up of contacts from database to table.
+    displayChange() takes the user from this div to ContactSearchDiv-->
     <div id = "searchBox" style = "display: none">
         <button type="button" id="searchBox1" style="display:block" onclick="doSearch();
-        displayChange('contactSearchDiv', 'searchBox');"> Really Search </button><br />
+        displayChange('contactSearchDiv', 'searchBox');"> Really Search </button><br/>
     </div>
 
+    <!-- Alright.  This is where most of the problems are occurring.  The edit and delete buttons are self-explanatory.  The table
+    is loaded and filtered on searchText by calling filterSearch() when the user types in any key
+    A new searchTable appears to be created every time searchBox() gets clicked and superimposes itself onto the prior tables and buttons and causes
+    the big mess you see.  I attempt to hide the table with contactSearchDiv's returnFromSearch button, but it only seems to do it once, and
+      doesn't clear the former table.  May need to find a way to clear and hide the table in .js-->
     <div id = "contactSearchDiv" style = "display: none">
-        <input type="text" id="searchText" onkeyup="filterSearch();" placeholder="Type who you want." />
-        </br></br></br></br></br></br>
-        </br></br></br>
+
         <button type="button" id="editFromSearch" style="display:block" onclick="displayChange('editContactDivForm', 'contactSearchDiv');">
             Edit Contact </button><br/>
         <button type="button" id="deleteFromSearch" style="display:block" onclick="displayChange('deleteDiv', 'contactSearchDiv');">
-            Delete Contact </button><br/></br>
-
+            Delete Contact </button>
+        <br/><br/><br/><br/>
+        <input type="text" id="searchText" onkeyup="filterSearch();" placeholder="Type who you want." />
+        <br/><br/><br/><br/>
         <div id = "searchList">
-        </div><br /><br/>
-
+        </div><br/>
         <button type="button" id="returnFromSearch" style="display:block" onclick="displayChange('mainPanel', 'contactSearchDiv'); hide('myTable');">
             Return to Page </button><br/>
     </div>
 
 
-
-    <!--    &lt;!&ndash; Contains the components of the popup window that asks you to confirm deletion of a contact &ndash;&gt;-->
-    <!--    <div id="finalizeDelete" class="popup">-->
-    <!--        <div id="popupContent">-->
-    <!--            <button type="button" id="deleteButton" onclick="doDelete();"> Delete Contact </button>-->
-    <!--            <button type="button" id="editButton" onclick="displayChange('editContactDivForm', 'contactSearchDiv')"> Edit Contact </button>-->
-
-    <!--        </div>-->
-    <!--    </div>-->
-
+    <!--    should work fine-->
     <div id = "deleteDiv" style ="display: none">
         <input type="text" id = "deleteContact">  Confirm you want to delete </input>
         <button type="button" id="delete" style="display:block" onclick="displayChange('contactSearchDiv', 'deleteDiv');">
             Confirm Delete </button><br/>
     </div>
 
-
+    <!-- should work fine -->
     <form id="editContactDivForm" style = "display: none">
         <h2 id="title">Edit Contact</h2>
         <label for="editedFirstName">First Name</label>
-        <input type="text" id="editedFirstName"><br>
+        <input type="text" id="editedFirstName"><br/>
         <label for="editedLastName">Last Name</label>
-        <input type="text" id="editedLastName"><br>
+        <input type="text" id="editedLastName"><br/>
         <label for="editedEmail">Email</label>
-        <input type="email" id="editedEmail"><br>
+        <input type="email" id="editedEmail"><br/>
         <label for="editedPhoneNumber">Phone Number</label>
-        <input type="tel" id="editedPhoneNumber"><br>
+        <input type="tel" id="editedPhoneNumber"><br/>
         <span id="contactID" style="display:none; visibility:hidden;"></span>
         <span id="row" style="display:none; visibility:hidden;"></span>
         <div class="modalButtonLayout">
@@ -111,8 +107,6 @@
             <span id="submitError"></span>
         </div>
     </form>
-
-
 
 </div>
 </body>
