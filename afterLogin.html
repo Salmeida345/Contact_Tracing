@@ -3,7 +3,7 @@
     <title>Contact Manager</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link id="mode" href="css/colors.css" rel="stylesheet">
-    <script type="text/javascript" src="js/access.js" defer></script>
+    <script type="text/javascript" src="js/access.js" ></script>
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function()
         {
@@ -31,7 +31,7 @@
     <!-- Contacts main page div WORKS FINE-->
     <div id="mainPanel" style="display:block">
         <br />
-        <button type="button" onclick="displayChange('searchBox', 'mainPanel');" > Search</button>
+        <button type="button" onclick="displayChange('contactSearchDiv', 'mainPanel'); doSearch();"> Search</button>
         <br/><br/>
         <button type="button" id="goToAddContactsButton" style="display:block" onclick="displayChange('addContactsDiv', 'mainPanel');"> Add </button><br/>
 
@@ -52,17 +52,7 @@
         <span id="added"></span>
     </div>
 
-    <!--  searchBox div is called from main panel.  The reason for this intermediary button is that I want to be able to call doSearch() before
-    filtering.  This is necessary because doSearch() handles the loading up of contacts from database to table.
-    displayChange() takes the user from this div to ContactSearchDiv-->
-    <div id = "searchBox" style = "display: none">
-        <button type="button" id="searchBox1" style="display:block" onclick="doSearch();
-        displayChange('contactSearchDiv', 'searchBox');"> Really Search </button><br/>
-    </div>
-
-    <!-- Alright.  This is where most of the problems are occurring.  The edit and delete buttons are self-explanatory.  The table
-    is loaded and filtered on searchText by calling filterSearch() when the user types in any key
-    A new searchTable appears to be created every time searchBox() gets clicked i.e., every time anything is added or removed from input element-->
+    <!-- Contact Search textbox and table-->
     <div id = "contactSearchDiv" style = "display: none">
 
         <br/><br/><br/><br/>
@@ -70,15 +60,14 @@
         <br/><br/><br/><br/>
         <div id = "searchList">
         </div><br/>
-        <button type="button" id="returnFromSearch" style="display:block" onclick="displayChange('mainPanel', 'contactSearchDiv'); /*clearTable();*/">
+        <button type="button" id="returnFromSearch" style="display:block" onclick="displayChange('mainPanel', 'contactSearchDiv');">
             Return to Page </button><br/>
     </div>
 
 
     <!--    should work fine-->
     <div id = "deleteDiv" style ="display: none">
-        <input type="text" id = "deleteContact">  Confirm you want to delete </input>
-        <button type="button" id="delete" style="display:block" onclick="displayChange('contactSearchDiv', 'deleteDiv');">
+        <button type="button" id="delete" style="display:block" onclick="displayChange('mainPanel', 'deleteDiv'); doSearch();">
             Confirm Delete </button><br/>
     </div>
 
@@ -96,8 +85,8 @@
         <span id="contactID" style="display:none; visibility:hidden;"></span>
         <span id="row" style="display:none; visibility:hidden;"></span>
         <div class="modalButtonLayout">
-            <button type="button" id="submitContactBut" class="buttons" onclick="doEdit();">Submit Contact</button>
-            <button type="button" id="cancelEditContactButton" class="buttons" onclick="displayChange('contactSearchDiv', 'editContactDivForm'); doSearch();">Return</button>
+            <button type="button" id="submitContactBut" class="buttons" onclick="doEdit(); ">Submit Contact</button>
+            <button type="button" id="returnEditContactButton" class="buttons" onclick="displayChange('contactSearchDiv', 'editContactDivForm'); doSearch();">Return</button>
             <span id="submitError"></span>
         </div>
     </form>
