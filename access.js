@@ -270,7 +270,7 @@ function addContacts() {
 
 // performs filterSearch on table
     function filterSearch() {
-        var input, filter, table, div, tr, td, i;
+        var input, filter;
         input = document.getElementById("searchText");
         filter = input.value.toUpperCase();
 
@@ -336,8 +336,14 @@ function gotoEditContact(id)
         document.getElementById("userName").innerHTML = "Contact has been updated";
     }
 
+    //Transitions panels upon onclick by user.
 
-// called by HTML and commits deletion
+    function goToDelete(id){
+        displayChange('deleteDiv', 'contactSearchDiv');
+        doDelete(id);
+    }
+
+// deletes contact
     function doDelete(id)
     {
 
@@ -364,6 +370,7 @@ function gotoEditContact(id)
 
         document.getElementById("userName").innerHTML = "Contact has been deleted";
     }
+
 
     function buildTable(results) {
         var searchList = document.getElementById("searchList").innerHTML;
@@ -458,7 +465,7 @@ function gotoEditContact(id)
             deleteButton.type = "button";
             deleteButton.id = 'btn' + searchList.id; // ensure correct id is getting passed through. 'btn' removed a couple lines below
             deleteButton.addEventListener("click", function() {
-                doDelete(this.id.replace('btn', ''));
+                goToDelete(this.id.replace('btn', ''));
             });
             deleteButton.innerHTML = "Delete";
 
