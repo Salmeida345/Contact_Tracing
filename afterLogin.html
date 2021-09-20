@@ -65,10 +65,6 @@
     A new searchTable appears to be created every time searchBox() gets clicked i.e., every time anything is added or removed from input element-->
     <div id = "contactSearchDiv" style = "display: none">
 
-        <button type="button" id="editFromSearch" style="display:block" onclick="displayChange('editContactDivForm', 'contactSearchDiv');">
-            Edit Contact </button><br/>
-        <button type="button" id="deleteFromSearch" style="display:block" onclick="displayChange('deleteDiv', 'contactSearchDiv');">
-            Delete Contact </button>
         <br/><br/><br/><br/>
         <input type="text" id="searchText" onkeyup="filterSearch();" placeholder="Type who you want." />
         <br/><br/><br/><br/>
@@ -100,8 +96,8 @@
         <span id="contactID" style="display:none; visibility:hidden;"></span>
         <span id="row" style="display:none; visibility:hidden;"></span>
         <div class="modalButtonLayout">
-            <button type="button" id="submitContactBut" class="buttons" onclick="doEdit();">Submit</button>
-            <button type="button" id="cancelEditContactButton" class="buttons" onclick="displayChange('contactSearchDiv', 'editContactDivForm')">Cancel</button>
+            <button type="button" id="submitContactBut" class="buttons" onclick="doEdit();">Submit Contact</button>
+            <button type="button" id="cancelEditContactButton" class="buttons" onclick="displayChange('contactSearchDiv', 'editContactDivForm'); doSearch();">Return</button>
             <span id="submitError"></span>
         </div>
     </form>
