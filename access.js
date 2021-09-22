@@ -46,7 +46,8 @@ function doLogin() {
                     return;
                 }
 
-
+                firstName = jsonObject.firstName;
+                lastName = jsonObject.lastName;
 
 
                 saveCookie();
@@ -81,14 +82,6 @@ function doRegister()
 
     document.getElementById("registration").innerHTML = "";
 
-    if (firstName === "" || firstName == null || lastName === "" || lastName == null ||
-        login === "" || login == null || email === "" || email == null ||
-        password === "" || password == null || confirmPassword === "" || confirmPassword == null)
-    {
-        document.getElementById("registration").innerHTML = "Please fill out any empty field(s)";
-        return;
-    }
-
     if (password !== confirmPassword)
     {
         document.getElementById("registration").innerHTML = "Passwords do not match";
@@ -96,7 +89,7 @@ function doRegister()
     }
 
     var jsonPayload = JSON.stringify({firstName: firstName,
-        lastName: lastName, email: email, login: login, password: password });
+        lastName: lastName,email: email, login: login, password: password });
     var url = urlBase + '/LAMPAPI/register.' + extension;
 
     var xhr = new XMLHttpRequest();
@@ -119,6 +112,8 @@ function doRegister()
                     return;
                 }
 
+                firstName = jsonObject.firstName;
+                lastName = jsonObject.lastName;
 
                 saveCookie();
 
@@ -134,13 +129,12 @@ function doRegister()
 
 }
 
-
 function saveCookie()
 {
     var minutes = 20;
     var date = new Date();
     date.setTime(date.getTime()+(minutes*60*1000));
-    document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ";expires=" + date.toGMTString();
+    document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userID=" + userId + ";expires" + date.toGMTString();
 }
 
 function readCookie()
@@ -160,7 +154,7 @@ function readCookie()
         {
             lastName = tokens[1];
         }
-        else if( tokens[0] === "userId" )
+        else if( tokens[0] === "userID" )
         {
             userId = parseInt( tokens[1].trim() );
         }
@@ -172,7 +166,17 @@ function readCookie()
     }
     else
     {
-        document.getElementById("userName").innerHTML = "Logged in as " + firstName + " " + lastName ;
+        var welcome;  
+        var date = new Date();  
+        var hour = date.getHours();
+        if (hour < 12) {
+            welcome = "Good morning, "
+        } else if (hour < 17) {  
+            welcome = "Good afternoon, "
+        } else {  
+            Welcome = "Good evening, "
+        }
+        document.getElementById("userName").innerHTML = welcome + firstName + " " + lastName +"!";
     }
 }
 
@@ -203,15 +207,15 @@ function addContacts() {
 
     // checks that info is good
     if (addedFName === null || addedFName === "" || addedLName === "" || addedLName === null) {
-        document.getElementById("added").innerHTML = "Please type in your First and/or Last Name";
+        document.getElementById("added").innerHTML = "Forget something? Please enter the full name of the contact.";
         return;
     }
     if (addedEmail === null || addedEmail === "" || addedPhone === null || addedPhone === "") {
-        document.getElementById("added").innerHTML = "Please enter a correct Email or Number";
+        document.getElementById("added").innerHTML = "Oops! Please fill out all required fields.";
         return;
     }
 
-    displayChange('mainPanel', 'addContactsDiv');
+
     document.getElementById("added").innerHTML = "";
 
     var jsonPayload = JSON.stringify({
@@ -229,7 +233,11 @@ function addContacts() {
         xhr.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
 
-                document.getElementById("added").innerHTML = "Contact has been added";
+                document.getElementById("added").innerHTML = "Contact successfully added! What next?";
+                document.getElementById('newContactFName').value='';
+                document.getElementById("newContactLName").value='';
+                document.getElementById("newContactEmail").value='';
+                document.getElementById("newContactPhone").value='';
 
             }
         };
@@ -279,23 +287,15 @@ function addContacts() {
         input = document.getElementById("searchText");
         filter = input.value.toUpperCase();
 
-        if (filter !== "") {
-            let results = localResults.filter(function (x) {
+        let results = localResults.filter(function(x) {
 
-                return x.firstName.toUpperCase().indexOf(filter) > -1 ||
-                    x.lastName.toUpperCase().indexOf(filter) > -1 ||
-                    x.phone.toUpperCase().indexOf(filter) > -1 ||
-                    x.email.toUpperCase().indexOf(filter) > -1;
-            });
+            return x.firstName.toUpperCase().indexOf(filter) > -1 ||
+                x.lastName.toUpperCase().indexOf(filter) > -1 ||
+                x.phone.toUpperCase().indexOf(filter) > -1||
+                x.email.toUpperCase().indexOf(filter) > -1;
+        });
 
-            buildTable1(results);
-        }
-        else
-        {
-            let results = localResults;
-            results = "";
-            buildTable1(results);
-        }
+        buildTable(results);
     }
 
 function gotoEditContact(id)
@@ -325,17 +325,6 @@ function gotoEditContact(id)
         var newContactsEmail = document.getElementById("editedEmail").value;
         var newContactsPhone = document.getElementById("editedPhoneNumber").value;
 
-        // check that fields aren't empty
-        if (newContactsFirstName === "" || newContactsFirstName == null || newContactsLastName === "" || newContactsLastName == null
-            || newContactsEmail === "" || newContactsEmail == null || newContactsPhone === "" || newContactsPhone == null)
-        {
-            document.getElementById("submitError").innerHTML = "Please fill out any empty field(s)";
-            return;
-        }
-
-
-        displayChange('mainPanel', 'editContactDivForm');
-
 
         document.getElementById("submitError").innerHTML = "";
 
@@ -356,9 +345,9 @@ function gotoEditContact(id)
             document.getElementById("userName").innerHTML = err.message;
         }
 
-        doSearch();
 
-        document.getElementById("userName").innerHTML = "Contact has been updated";
+        //document.getElementById("userName").innerHTML = "Contact successfully updated! What next?";
+        document.getElementById("success").innerHTML = "Contact sucessfully updated! What next?";
     }
 
     //Transitions panels upon onclick by user.
@@ -393,117 +382,11 @@ function gotoEditContact(id)
 
         doSearch();
 
-        document.getElementById("userName").innerHTML = "Contact has been deleted";
+        document.getElementById("userName").innerHTML = "";
     }
 
 
     function buildTable(results) {
-        var searchList = document.getElementById("searchList").innerHTML;
-
-        searchList = "";
-        var contactSearchDiv = document.getElementById('contactSearchDiv');
-
-        // Delete old table
-        let oldTable = document.getElementById("myTable");
-        if(oldTable) {
-            oldTable.remove();
-        }
-
-        var table= document.createElement('table'),
-            thead = document.createElement('thead'),
-            tbody = document.createElement('tbody'),
-            th,
-            tr,
-            td;
-
-        th = document.createElement('th');
-        table.id = "myTable"
-        table.style.display = "none";
-        th.innerHTML= "First Name";
-        table.appendChild(th);
-        th = document.createElement('th');
-        th.innerHTML= "Last Name";
-        table.appendChild(th);th = document.createElement('th');
-        th.innerHTML= "Phone Number";
-        table.appendChild(th);
-
-        th = document.createElement('th');
-        th.innerHTML= "Email";
-        table.appendChild(th);
-
-        th = document.createElement('th');
-        th.innerHTML= "Edit";
-        table.appendChild(th);
-
-        th = document.createElement('th');
-        th.innerHTML= "Delete";
-        table.appendChild(th);
-
-        table.appendChild(thead);
-        table.appendChild(tbody);
-
-        contactSearchDiv.appendChild(table);
-
-
-        for (var i = 0; i <= results.length -1; i++) {
-            tr = document.createElement('tr'),
-
-
-            searchList = results[i];
-
-            //for fName
-            td = document.createElement('td');
-            td.innerHTML=searchList.firstName;
-            tr.appendChild(td);
-
-            //for lName
-            td = document.createElement('td');
-            td.innerHTML=searchList.lastName;
-            tr.appendChild(td);
-
-            //for fName
-            td = document.createElement('td');
-            td.innerHTML=searchList.phone;
-            tr.appendChild(td);
-
-            //for fName
-            td = document.createElement('td');
-            td.innerHTML=searchList.email;
-            tr.appendChild(td);
-
-            td = document.createElement('td');
-            var editButton = document.createElement("button");
-            editButton.type = "button";
-            editButton.id = 'btn' + searchList.id; // ensure correct id is getting passed through. 'btn' removed a couple lines below
-            editButton.addEventListener("click", function() {
-                gotoEditContact(this.id.replace('btn', ''));
-            });
-            editButton.innerHTML = "Edit"
-
-            td.appendChild(editButton);
-            tr.appendChild(td);
-            tbody.appendChild(tr);
-
-            td = document.createElement('td');
-
-            var deleteButton = document.createElement("button");
-            deleteButton.type = "button";
-            deleteButton.id = 'btn' + searchList.id; // ensure correct id is getting passed through. 'btn' removed a couple lines below
-            deleteButton.addEventListener("click", function() {
-                goToDelete(this.id.replace('btn', ''));
-            });
-            deleteButton.innerHTML = "Delete";
-
-            td.appendChild(deleteButton);
-            tr.appendChild(td);
-            tbody.appendChild(tr);
-
-
-
-        }
-    }
-
-    function buildTable1(results) {
         var searchList = document.getElementById("searchList").innerHTML;
 
         searchList = "";
@@ -603,8 +486,6 @@ function gotoEditContact(id)
             td.appendChild(deleteButton);
             tr.appendChild(td);
             tbody.appendChild(tr);
-
-
 
         }
     }
