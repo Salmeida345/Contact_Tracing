@@ -1,18 +1,67 @@
+html, body {
+    width: 100%;
+    height:100%;
+  }
+  
+  body {
+      background: linear-gradient(-45deg, #ebf0f1, #5a8ab3, #a8e8ff, #4d5b9b);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+    }
+  
+  @keyframes gradient {
+      0% {
+          background-position: 0% 50%;
+      }
+      50% {
+          background-position: 100% 50%;
+      }
+      100% {
+          background-position: 0% 50%;
+      }
+  }
+
+  @font-face {
+    font-family: 'Dosis', sans-serif;
+    src: "https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&display=swap";
+    }
+
+#title 
+{
+    font-size: 40px;
+    width: 100%;
+    margin: 2% 5%;
+    text-align: center;
+    font: Verdana, Tahoma, sans-serif;
+    color: #80888b;
+}
+
+img {
+    width: 900px;
+    max-width: 900px;
+    border-radius: 15px 50px;
+    height: 500px;
+    line-height: 150%;
+    margin: auto;
+  }
+
 input, .box {
     padding: 9px;
-    border: solid 1px #E5E5E5;
+    border: solid 1px #5e6986;
     outline: 0;
-    font: normal 13px/100% Verdana, Tahoma, sans-serif;
+    font-family: 'Dosis', sans-serif;
     width: 200px;
-    background: #FFFFFF url('') left top repeat-x;
+    background: #bdcadb url('') left top repeat-x;
     background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #EEEEEE), to(#FFFFFF));
     background: -moz-linear-gradient(top, #FFFFFF, #EEEEEE 1px, #FFFFFF 25px);
+    border-radius: 10px;
     box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
     -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
     -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
 }
+
 table {
-    font-family: arial, sans-serif;
+    font-family: 'Dosis', sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
@@ -24,20 +73,42 @@ td, th {
 }
 
 tr:nth-child(even) {
-    background-color: #dddddd;
+    background-color: #13338a;
 }
 
 .box {
     width: 400px;
     max-width: 400px;
-    height: 150px;
+    border-radius: 15px 50px;
+    height: auto;
     line-height: 150%;
+    margin: auto;
+    font-family: 'Dosis', sans-serif;
+    font-size: 24px;
 }
 
 input:hover, .box:hover,
 input:focus, .box:focus {
     border-color: #C9C9C9;
 }
+
+.center {
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    height: 50%;
+    padding: 5px 0;
+  }
+
+  .center2 {
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: -10px;
+  }
 
 .form button {
     margin-left: 10px;
@@ -46,9 +117,11 @@ input:focus, .box:focus {
 
 .box button {
     width: auto;
-    padding: 9px 15px;
-    background: #617798;
+    background: #d7dce2;
     border: 0;
     font-size: 14px;
-    color: #FFFFFF;
+    border-radius: 50px;
+    color: #5e6986;
+    font-weight: bold;
+    font-family: 'Dosis', sans-serif;
 }
