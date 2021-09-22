@@ -2,47 +2,49 @@
 <html>
 <head>
     <title>Contact Manager</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&display=swap');
+    </style>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--implement .css and align the header-->
     <link rel ="stylesheet" href = "css/colors.css">
-    <script type="text/javascript" src="js/access.js" ></script>
+
     <style>h1{text-align: center;}</style>
-
-
 
 </head>
 <body>
-<div class="box">
-<h1 id = "title">Contact Manager</h1><br/><br/>
+<img src="images\logo.png" alt="ContactTracing" class="center" style="padding-top: 10px; padding-bottom: 40px;">
+</body>
 
-
-
-    <div id = "loginDiv" style="display:block">
-        <span id = "inner-title">Login Form</span><br/></br>
-        <input type="text" id="loginName" placeholder="Username" /><br />
-        <input type="password" id="loginPW" placeholder="Password"/><br />
-        <button type="button" id="loginButton" onclick="doLogin();"> Login </button>
-        <button type="button" id="switchToSignup" onclick="displayChange('registerDiv', 'loginDiv');">Register</button>
+<body>
+<div class="box" class="center">
+    <div id = "loginDiv">
+        
+        <span style= "text-align:center; font-weight: bold"><p>Manage your contacts. Manage your life.</p></span>
+        <input type="text" id="loginName" placeholder="Username" class="center2"/><br />
+        <input type="password" id="loginPW" placeholder="Password" class="center2"/><br />
+        <span class="center2">
+        <button type="button" id="loginButton" style= "margin-bottom: 30px" onclick="doLogin();"> Login </button>
+        <button type="button" id="switchToSignup" onclick="displayChange('registerDiv', 'loginDiv');">Register here!</button>
         <span id="login"></span>
+    </span>
     </div>
 
-    <div id="registerDiv" style="display:none">
-        <span >Registration Form</span></br>
-        <input type="text" id="registerFName" placeholder="First Name" /><br />
-        <input type="text" id="registerLName" placeholder="Last Name" /><br />
-        <input type="text" id="registerEmail" placeholder="Email"/><br/>
-        <input type="text" id="registerUser" placeholder="Username" /><br />
-        <input type="password" id="registerPW" placeholder="Password"/><br />
-        <input type="password" id="registerConfirmPW" placeholder="Confirm Password"/><br/>
-        <button type="button" id="signupButton" onclick="doRegister();">Register</button>
-        <button type="button" id="switchToLogin" onclick="displayChange('loginDiv', 'registerDiv');">Back to Login</button>
+    <div id="registerDiv" style="display:none;">
+        <span class="center2" style = "text-align:center; font-weight: bold">New here?</span></br>
+        <input type="text" id="registerFName" placeholder="First Name" class="center2"/><br />
+        <input type="text" id="registerLName" placeholder="Last Name" class="center2"/><br />
+        <input type="text" id="registerEmail" placeholder="Email" class="center2"/><br/>
+        <input type="text" id="registerUser" placeholder="Username" class="center2"/><br />
+        <input type="password" id="registerPW" placeholder="Password" class="center2"/><br />
+        <input type="password" id="registerConfirmPW" placeholder="Confirm Password" class="center2"/><br/>
+        <button type="button" id="signupButton" class="center2" style= "margin-bottom: 30px" onclick="doRegister();">Register</button>
+        <button type="button" id="switchToLogin" class="center2" style= "margin-bottom: 30px" onclick="displayChange('loginDiv', 'registerDiv');">Back to Login</button>
         <span id="registration"></span>
     </div>
-
-</div>
 </div>
 <script>
 </script>
 </body>
-
+<script type="text/javascript" src="js/access.js" defer></script>
 </html>
