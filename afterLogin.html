@@ -1,9 +1,14 @@
+<!DOCTYPE html>
 <html>
 <head>
     <title>Contact Manager</title>
+    <link rel="shortcut icon" type="image/ico" href="images\favicon.ico"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&display=swap');
+    </style>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link id="mode" href="css/colors.css" rel="stylesheet">
-    <script type="text/javascript" src="js/access.js" ></script>
+    <link id="mode" href="css/colorsHtml.css" rel="stylesheet">
+    <script type="text/javascript" src="js/access.js" defer></script>
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function()
         {
@@ -13,84 +18,87 @@
 
 </head>
 <body>
-
+<br></br>
 <!--div box wraps around entire body.  Used for styling purposes-->
-<div class="box">
+<div class="box" style="margin:auto">
 
-
-    <!-- logout button WORKS FINE-->
-    <div id="loginDiv" style="display:block">
-        <span id="userName"></span><br/>
-        <button type="button" class="logoutButton" style="display:block" onclick="doLogout();"> Log Out </button>
-    </div>
-
-
-    <h1>Contact Manager</h1>
-
+<!-- logout button WORKS FINE-->
+<div id="loginDiv" style="display:block">
+    <button type="button" class="logoutButton" style="display:block; margin-left:800px;" onclick="doLogout();"> Log Out </button>
+    <span style="float: right; font-size: 16px" id="userName"></span><br/>
+</div>
 
     <!-- Contacts main page div WORKS FINE-->
-    <div id="mainPanel" style="display:block">
-        <br />
-        <button type="button" onclick="displayChange('contactSearchDiv', 'mainPanel'); doSearch();"> Search</button>
-        <br/><br/>
-        <button type="button" id="goToAddContactsButton" style="display:block" onclick="displayChange('addContactsDiv', 'mainPanel');"> Add </button><br/>
+    <div id="mainPanel" style="display:block" class ="center">
+        <span style= "text-align:center; font-weight:bold; color: #626c74"><p>It's so nice to see you again!</p></span>
+        <span style= "text-align:center; font-weight:bold; color: #626c74"><p>What would you like to do?</p></span>
 
-        <br/><br />
+        <br />
+        <button type="button" style="width: 200px; height:60px; font-size: 34px" onclick="displayChange('contactSearchDiv', 'mainPanel'); doSearch();"> Search!</button>
+        <br></br>
+        <button type="button" style="width: 200px; height:60px; font-size: 34px" id="goToAddContactsButton" onclick="displayChange('addContactsDiv', 'mainPanel');"> Add!</button><br/>
+        <br></br>
+
     </div>
+
 
     <!--    add contacts div screen WORKS FINE-->
     <div id="addContactsDiv" style="display:none">
         <br/>
-        <input type="text" id="newContactFName" placeholder="Contact's First Name">
-        <input type="text" id="newContactLName" placeholder="Contact's Last Name">
-        <input type="text" id="newContactEmail" placeholder="Contact's Email">
-        <input type="text" id="newContactPhone" placeholder="Contact's Phone Number">
-        <button type="button" id="addContactsButton" style="display:block" onclick="addContacts();"
-        > Add </button><br />
-        <button type="button" id="returnFromAdd" style="display:block" onclick="displayChange('mainPanel', 'addContactsDiv');"
-        >Return to Page </button><br />
-        <span id="added"></span>
+        <span style= "text-align:center; font-weight:bold; color: #626c74"><p>Adding a new contact?</p></span>
+        <input type="text" id="newContactFName" placeholder="Contact's First Name" class="center2"><br />
+        <input type="text" id="newContactLName" placeholder="Contact's Last Name" class="center2"><br />
+        <input type="text" id="newContactEmail" placeholder="Contact's Email" class="center2"><br />
+        <input type="text" id="newContactPhone" placeholder="Contact's Phone Number" class="center2"><br />
+        <button type="button" id="addContactsButton" class ="center" style="width: 160px; height:45px; font-size: 25px" onclick="addContacts();"
+        > Add contact</button><br />
+        <span id="added" class="center2"></span><br/>
+        <button type="button" id="returnFromAdd" style="display:block" class="center2" onclick="displayChange('mainPanel', 'addContactsDiv');" >Return home?</button><br />
     </div>
 
     <!-- Contact Search textbox and table-->
-    <div id = "contactSearchDiv" style = "display: none">
-
-        <br/><br/><br/><br/>
-        <input type="text" id="searchText" onkeyup="filterSearch();" placeholder="Type who you want." />
-        <br/><br/><br/><br/>
+    <div id = "contactSearchDiv" style = "display: none" class="center2">
+        <span style= "text-align:center; font-weight:bold; color: #626c74"><p>Looking for someone?</p></span>
+        <br/>
+        <input type="text" id="searchText" onkeyup="filterSearch();" placeholder="Type anything." />
+        <br/>
         <div id = "searchList">
-        </div><br/>
-        <button type="button" id="returnFromSearch" style="display:block" onclick="displayChange('mainPanel', 'contactSearchDiv');">
-            Return to Page </button><br/>
+        </br></br>
+        </div>
+        <button type="button" id="returnFromSearch" class ="center" style="width: 140px; height:40px; font-size: 20px" style="display:block" onclick="displayChange('mainPanel', 'contactSearchDiv');">
+            Return home? </button><br/>
     </div>
 
 
     <!--    should work fine-->
     <div id = "deleteDiv" style ="display: none">
-        <button type="button" id="delete" style="display:block" onclick="displayChange('mainPanel', 'deleteDiv'); doSearch();">
-            Confirm Delete </button><br/>
+        <span style = "text-align:center; color: #626c74" class="center"><p>Parting is such a sweet sorrow. Are you sure you would like to delete this contact?</p></span><br />
+        <button type="button" id="delete" style="display:block" class="center" style="width: 170px; height:50px; font-size: 30px" onclick="displayChange('contactSearchDiv', 'deleteDiv'); doSearch();">
+            Confirm deletion</button><br/>
     </div>
 
     <!-- should work fine -->
-    <form id="editContactDivForm" style = "display: none">
-        <h2 id="title">Edit Contact</h2>
-        <label for="editedFirstName">First Name</label>
-        <input type="text" id="editedFirstName"><br/>
-        <label for="editedLastName">Last Name</label>
-        <input type="text" id="editedLastName"><br/>
-        <label for="editedEmail">Email</label>
-        <input type="email" id="editedEmail"><br/>
-        <label for="editedPhoneNumber">Phone Number</label>
-        <input type="tel" id="editedPhoneNumber"><br/>
+    <form id="editContactDivForm" style = "display: none" class = "center">
+        <span style= "text-align:center; font-weight:bold; color: #626c74"><p>Editing your contact?</p></span>
+        <span style= "text-align:center; font-size: 18px; margin-top: -40px; margin-bottom: -30px; color: #2e4457"><p>First Name</p></span>
+        <input type="text" id="editedFirstName"class="center2"><br/>
+        <span style= "text-align:center; font-size: 18px; margin-top: -40px; margin-bottom: -30px; color: #2e4457"><p>Last Name</p></span>
+        <input type="text" id="editedLastName" class="center2"><br/>
+        <span style= "text-align:center; font-size: 18px; margin-top: -40px; margin-bottom: -30px; color: #2e4457"><p>Email</p></span>
+        <input type="email" id="editedEmail"class="center2"><br/>
+        <span style= "text-align:center; font-size: 18px; margin-top: -40px; margin-bottom: -30px; color: #2e4457"><p>Phone Number</p></span>
+        <input type="tel" id="editedPhoneNumber"class="center2"><br/>
         <span id="contactID" style="display:none; visibility:hidden;"></span>
         <span id="row" style="display:none; visibility:hidden;"></span>
         <div class="modalButtonLayout">
-            <button type="button" id="submitContactBut" class="buttons" onclick="doEdit(); ">Submit Contact</button>
-            <button type="button" id="returnEditContactButton" class="buttons" onclick="displayChange('contactSearchDiv', 'editContactDivForm'); doSearch();">Return</button>
+            <button type="button" id="submitContactBut" class="buttons" style="width: 200px; height:50px; font-size: 25px" onclick="doEdit();">Update contact!</button></br></br>
+            <span id="success" style= "margin-top: 10px" class="center2"></span></br>
+            <button type="button" id="returnEditContactButton" class="buttons" class ="center" style="width: 160px; height:40px; font-size: 15px" onclick="displayChange('contactSearchDiv', 'editContactDivForm'); doSearch();">Return to search?</button>
             <span id="submitError"></span>
         </div>
     </form>
 
+</div>
 </div>
 </body>
 <script>
